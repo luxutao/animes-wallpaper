@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">动漫壁纸</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">未登录</string>
+    <string name="nav_header_subtitle">anime@animekid.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">设置</string>
+
+    <string name="bottom_menus1">横屏壁纸</string>
+    <string name="bottom_menus2">竖屏壁纸</string>
+    <string name="bottom_menus3">必应壁纸</string>
+    <string name="bottom_menus4">上传</string>
+    <string name="image_likes">%1$d 次下载</string>
+    <string name="warning">
+        本站所有资源均收集于网络,如果侵犯了您的权益,请联系站长 Email:912530326@qq.com。
+        All resources on this website are collected on the Internet. If infringe your rights, please contact the webmaster. Email:912530326@qq.com。
+        本站的UI接受打赏,功能不接受打赏,如您的打赏是打赏给本站的功能,请联系站长取回打赏！谢谢！
+    </string>
+    <string name="str_email">EMAIL</string>
+    <string name="str_password">PASSWORD</string>
+    <string name="str_captcha">CAPTCHA</string>
+    <string name="str_login">登录</string>
+    <string name="str_register">注册</string>
+    <string name="str_detail">详情</string>
+    <string name="str_profile">个人资料</string>
+    <string name="str_go_login">去登录</string>
+    <string name="str_forget_password">忘记密码</string>
+    <string name="str_no_account">没有账号?</string>
+    <string name="str_has_account">已有账号?</string>
+    <string name="str_forget_password_t">忘记密码?</string>
+    <string name="str_miss">想起来了?</string>
+    <string name="str_reset_password">重置密码</string>
+</resources>
