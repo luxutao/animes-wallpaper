@@ -1,11 +1,12 @@
 package cn.animekid.animeswallpaper.api
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
 import retrofit2.Call
 import cn.animekid.animeswallpaper.data.ImageDataBean
 import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserAuthBean
+import cn.animekid.animeswallpaper.data.UserInfoBean
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
@@ -57,49 +58,52 @@ interface AnimeService {
     }
 
     @GET("getAnimepc")
-    fun getAnimepc(@Query("token") token: String = ToolsHelper().getToken("getAnimepc"), @Query("page") page: Int): Call<ImageDataBean>
+    fun getAnimepc(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimepc"), @Query("page") page: Int): Call<ImageDataBean>
 
     @GET("getAnimephone")
-    fun getAnimephone(@Query("token") token: String = ToolsHelper().getToken("getAnimephone"), @Query("page") page: Int): Call<ImageDataBean>
+    fun getAnimephone(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimephone"), @Query("page") page: Int): Call<ImageDataBean>
 
     @GET("getBing")
-    fun getBing(@Query("token") token: String = ToolsHelper().getToken("getBing"), @Query("page") page: Int): Call<ImageDataBean>
+    fun getBing(@Query("ticket") ticket: String = ToolsHelper.getTicket("getBing"), @Query("page") page: Int): Call<ImageDataBean>
 
     @FormUrlEncoded
     @POST("addCount")
-    fun addLikes(@Query("token") token: String = ToolsHelper().getToken("addCount"), @Field("addid") addid: Int): Call<ResponseDataBean>
+    fun addLikes(@Query("token") token: String, @Field("addid") addid: Int): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("login")
-    fun authLogin(@Query("token") token: String = ToolsHelper().getToken("login"), @Field("email") email: String, @Field("password") password: String): Call<UserAuthBean>
+    fun authLogin(@Query("ticket") ticket: String = ToolsHelper.getTicket("login"), @Field("email") email: String, @Field("password") password: String): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("register")
-    fun authRegister(@Query("token") token: String = ToolsHelper().getToken("register"), @Field("email") email: String, @Field("password") password: String): Call<ResponseDataBean>
+    fun authRegister(@Query("ticket") ticket: String = ToolsHelper.getTicket("register"), @Field("email") email: String, @Field("password") password: String): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("sendCaptcha")
-    fun sendCaptcha(@Query("token") token: String = ToolsHelper().getToken("sendCaptcha"), @Field("email") email: String): Call<ResponseDataBean>
+    fun sendCaptcha(@Query("ticket") ticket: String = ToolsHelper.getTicket("sendCaptcha"), @Field("email") email: String): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("logout")
-    fun authLogout(@Query("token") token: String = ToolsHelper().getToken("logout"), @Field("authtoken") authtoken: String): Call<ResponseDataBean>
+    fun authLogout(@Query("token") token: String, @Field("authtoken") authtoken: String): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("forgetpassword")
-    fun forgetPassword(@Query("token") token: String = ToolsHelper().getToken("forgetpassword"), @Field("email") email: String): Call<ResponseDataBean>
+    fun forgetPassword(@Query("ticket") ticket: String = ToolsHelper.getTicket("forgetpassword"), @Field("email") email: String): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("deluser")
-    fun delUser(@Query("token") token: String = ToolsHelper().getToken("deluser"), @Field("authid") authid: Int): Call<ResponseDataBean>
+    fun delUser(@Query("token") token: String, @Field("authid") authid: Int): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("changeuser")
-    fun changeProfile(@Query("token") token: String = ToolsHelper().getToken("changeuser"), @Field("email") email: String, @Field("name") name: String,@Field("sex") sex: String): Call<ResponseDataBean>
+    fun changeProfile(@Query("token") token: String, @Field("email") email: String, @Field("name") name: String,@Field("sex") sex: String): Call<ResponseDataBean>
+
+    @GET("getUserinfo")
+    fun getUserinfo(@Query("token") token: String): Call<UserInfoBean>
 
     @Multipart
     @POST("uploadImage")
-    fun uploadImage(@Query("token") token: String = ToolsHelper().getToken("uploadImage"), @Part file: MultipartBody.Part): Call<ResponseDataBean>
+    fun uploadImage(@Query("token") token: String, @Part file: MultipartBody.Part): Call<ResponseDataBean>
 }
 
 

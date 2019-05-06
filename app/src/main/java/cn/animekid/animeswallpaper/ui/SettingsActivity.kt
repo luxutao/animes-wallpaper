@@ -12,8 +12,9 @@ import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserAuthBean
+import cn.animekid.animeswallpaper.data.UserInfoBean
 import cn.animekid.animeswallpaper.utils.ClearCache
+import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import kotlinx.android.synthetic.main.settings.*
 import org.jetbrains.anko.db.*
@@ -23,7 +24,7 @@ import retrofit2.Response
 
 class SettingsActivity: AppCompatActivity() {
 
-    private var _userinfo:UserAuthBean.Data? = null
+    private var _userinfo:UserInfoBean.Data? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,7 @@ class SettingsActivity: AppCompatActivity() {
             dialog.setTitle("警告")
             dialog.setMessage("确认删除当前账号吗？")
             dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
-                Requester.apiService().delUser(authid = this._userinfo!!.userid).enqueue(object: Callback<ResponseDataBean> {
+                Requester.apiService().delUser(token = ToolsHelper.getToken(this@SettingsActivity), authid = this._userinfo!!.userid).enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         this@SettingsActivity.database.use {
                             delete("anime_users")
@@ -81,17 +82,17 @@ class SettingsActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val userinfo = this.getData(classParser<UserAuthBean.Data>())
+        val userinfo = this.getData(classParser<UserInfoBean.Data>())
         if (userinfo.count() > 0) {
             _userinfo = userinfo.first()
             Log.d("tag", _userinfo.toString())
         }
     }
 
-    private fun getData(parser: RowParser<UserAuthBean.Data>): List<UserAuthBean.Data>{
+    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
         val itemdata = this.database.use {
             select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserAuthBean.Data> = parseList(parser)
+                val itemlist: List<UserInfoBean.Data> = parseList(parser)
                 return@exec itemlist
             }
         }

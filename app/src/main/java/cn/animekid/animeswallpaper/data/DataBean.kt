@@ -28,10 +28,11 @@ data class ResponseDataBean(
     var msg: String
 )
 
-data class UserAuthBean(
+
+data class UserInfoBean(
     var code: Int,
-    var data: Data,
-    var msg: String
+    var msg: String,
+    var data: Data
 ) {
     data class Data(
         var userid: Int,

@@ -18,6 +18,7 @@ import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.ResponseDataBean
 import cn.animekid.animeswallpaper.utils.PhotoAlobum
+import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.ZoomImageView
 import com.bumptech.glide.Glide
 import retrofit2.Callback
@@ -52,7 +53,7 @@ class FragmentUpload: Fragment() {
             // 上传图片
             val photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
             val photoPart = MultipartBody.Part.createFormData("file", file.name, photoRequestBody)
-            Requester.apiService().uploadImage(file = photoPart).enqueue(object: Callback<ResponseDataBean> {
+            Requester.apiService().uploadImage(token = ToolsHelper.getToken(view.context), file = photoPart).enqueue(object: Callback<ResponseDataBean> {
                 override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                     Toast.makeText(view.context, "上传成功，谢谢你提供的资源！😘", Toast.LENGTH_SHORT).show()
                 }

@@ -12,7 +12,8 @@ import android.widget.EditText
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserAuthBean
+import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.profile.*
@@ -23,7 +24,7 @@ import retrofit2.Response
 
 class ProfileActivity: AppCompatActivity() {
 
-    private var _userinfo:UserAuthBean.Data? = null
+    private var _userinfo:UserInfoBean.Data? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,7 @@ class ProfileActivity: AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
             dialog.setTitle("提示").setSingleChoiceItems(sexarry, 0, DialogInterface.OnClickListener { dialog, which ->
                 Log.d("tag", sexarry[which])
-                Requester.apiService().changeProfile(email = this._userinfo!!.email, name = "", sex = sexarry[which]).enqueue(object: Callback<ResponseDataBean> {
+                Requester.apiService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = "", sex = sexarry[which]).enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         user_sex.text = sexarry[which]
                         this@ProfileActivity._userinfo!!.sex = sexarry[which]
@@ -62,7 +63,7 @@ class ProfileActivity: AppCompatActivity() {
             dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
                 val newName = newview.findViewById<EditText>(R.id.new_name).text.toString()
                 if (TextUtils.isEmpty(newName)) { return@OnClickListener }
-                Requester.apiService().changeProfile(email = this._userinfo!!.email, name = newName, sex = "").enqueue(object: Callback<ResponseDataBean> {
+                Requester.apiService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = newName, sex = "").enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         user_name.text = newName
                         this@ProfileActivity._userinfo!!.name = newName
@@ -84,7 +85,7 @@ class ProfileActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val userinfo = this.getData(classParser<UserAuthBean.Data>())
+        val userinfo = this.getData(classParser<UserInfoBean.Data>())
         if (userinfo.count() > 0) {
             _userinfo = userinfo.first()
             user_name.text = this._userinfo!!.name
@@ -96,10 +97,10 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
-    private fun getData(parser: RowParser<UserAuthBean.Data>): List<UserAuthBean.Data>{
+    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
         val itemdata = this.database.use {
             select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserAuthBean.Data> = parseList(parser)
+                val itemlist: List<UserInfoBean.Data> = parseList(parser)
                 return@exec itemlist
             }
         }

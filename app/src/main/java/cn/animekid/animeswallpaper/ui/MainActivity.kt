@@ -27,11 +27,12 @@ import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserAuthBean
+import cn.animekid.animeswallpaper.data.UserInfoBean
 import cn.animekid.animeswallpaper.fragment.FragmentBing
 import cn.animekid.animeswallpaper.fragment.FragmentPC
 import cn.animekid.animeswallpaper.fragment.FragmentPhone
 import cn.animekid.animeswallpaper.fragment.FragmentUpload
+import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isExit: Boolean = false
     private var currentFragment: Fragment? = null
     private var navheaderView: View? = null
-    private var _userinfo: UserAuthBean.Data? = null
+    private var _userinfo: UserInfoBean.Data? = null
     private var handler: Handler = @SuppressLint("HandlerLeak")
     object: Handler() {
         override fun handleMessage(msg: Message?) {
@@ -165,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.setTitle("提示")
                 dialog.setMessage("确认注销当前账号吗？")
                 dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
-                    Requester.apiService().authLogout(authtoken = this._userinfo!!.token).enqueue(object: Callback<ResponseDataBean> {
+                    Requester.apiService().authLogout(token = ToolsHelper.getToken(this@MainActivity), authtoken = this._userinfo!!.token).enqueue(object: Callback<ResponseDataBean> {
                         override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                             this@MainActivity.database.use {
                                 delete("anime_users")
@@ -198,7 +199,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        val userinfo = this.getData(classParser<UserAuthBean.Data>())
+        val userinfo = this.getData(classParser<UserInfoBean.Data>())
         if (userinfo.count() > 0) {
             _userinfo = userinfo.first()
             Log.d("tag", _userinfo.toString())
@@ -218,10 +219,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun getData(parser: RowParser<UserAuthBean.Data>): List<UserAuthBean.Data>{
+    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
         val itemdata = this.database.use {
             select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserAuthBean.Data> = parseList(parser)
+                val itemlist: List<UserInfoBean.Data> = parseList(parser)
                 return@exec itemlist
             }
         }

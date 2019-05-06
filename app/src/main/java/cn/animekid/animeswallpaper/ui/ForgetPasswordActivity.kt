@@ -26,7 +26,7 @@ class ForgetPasswordActivity: AppCompatActivity() {
 
         forget.setOnClickListener {
             val user_email = email.text.toString()
-            if (TextUtils.isEmpty(user_email) || ToolsHelper().isEmailValid(user_email) != true) {
+            if (TextUtils.isEmpty(user_email) || ToolsHelper.isEmailValid(user_email) != true) {
                 Toast.makeText(this, "邮箱不能为空或者邮箱格式不正确!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }

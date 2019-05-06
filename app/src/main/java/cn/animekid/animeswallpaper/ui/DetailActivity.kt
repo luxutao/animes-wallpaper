@@ -14,8 +14,9 @@ import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.DataParcelable
 import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserAuthBean
+import cn.animekid.animeswallpaper.data.UserInfoBean
 import cn.animekid.animeswallpaper.utils.SaveImage
+import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -78,7 +79,7 @@ class DetailActivity: AppCompatActivity() {
         this.findViewById<FloatingActionButton>(R.id.imageDownload).setOnClickListener {
             val itemdata = this.database.use {
                 select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                    val itemlist: List<UserAuthBean.Data> = parseList(classParser<UserAuthBean.Data>())
+                    val itemlist: List<UserInfoBean.Data> = parseList(classParser<UserInfoBean.Data>())
                     return@exec itemlist
                 }
             }
@@ -92,7 +93,7 @@ class DetailActivity: AppCompatActivity() {
                     Toast.makeText(this@DetailActivity, text, Toast.LENGTH_SHORT).show()
                 }
 
-                Requester.apiService().addLikes(addid = imagebean.image_id).enqueue(object : Callback<ResponseDataBean> {
+                Requester.apiService().addLikes(token = ToolsHelper.getToken(this@DetailActivity), addid = imagebean.image_id).enqueue(object : Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>?, response: Response<ResponseDataBean>?) {
                     }
 

@@ -29,7 +29,7 @@ class RegisterActivity: AppCompatActivity() {
 
         send_captcha.setOnClickListener {
             val user_email = email.text.toString()
-            if (TextUtils.isEmpty(user_email) || ToolsHelper().isEmailValid(user_email) != true) {
+            if (TextUtils.isEmpty(user_email) || ToolsHelper.isEmailValid(user_email) != true) {
                 Toast.makeText(this, "邮箱不能为空或者邮箱格式不正确!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -61,7 +61,7 @@ class RegisterActivity: AppCompatActivity() {
                 Toast.makeText(this, "验证码不正确!请登录邮箱查看正确的验证码!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (ToolsHelper().isEmailValid(user_email) != true) {
+            if (ToolsHelper.isEmailValid(user_email) != true) {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
