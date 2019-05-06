@@ -37,7 +37,7 @@ object ToolsHelper {
 
     fun getToken(ctx: Context): String {
         val userinfo = ctx.database.use {
-            select("token").exec {
+            select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
                 val userinfo: UserInfoBean.Data = parseSingle(classParser<UserInfoBean.Data>())
                 return@exec userinfo
             }

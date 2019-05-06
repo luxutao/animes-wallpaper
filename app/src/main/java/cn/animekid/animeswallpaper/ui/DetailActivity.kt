@@ -93,7 +93,7 @@ class DetailActivity: AppCompatActivity() {
                     Toast.makeText(this@DetailActivity, text, Toast.LENGTH_SHORT).show()
                 }
 
-                Requester.apiService().addLikes(token = ToolsHelper.getToken(this@DetailActivity), addid = imagebean.image_id).enqueue(object : Callback<ResponseDataBean> {
+                Requester.ImageService().addLikes(token = ToolsHelper.getToken(this@DetailActivity), addid = imagebean.image_id).enqueue(object : Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>?, response: Response<ResponseDataBean>?) {
                     }
 

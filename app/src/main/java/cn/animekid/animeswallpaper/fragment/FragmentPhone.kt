@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.adapter.ImageAdapter
-import cn.animekid.animeswallpaper.api.AnimeService
+import cn.animekid.animeswallpaper.api.ImageService
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.DataParcelable
 import cn.animekid.animeswallpaper.data.ImageDataBean
@@ -34,10 +34,10 @@ class FragmentPhone: BaseFFragment() {
         val reloadImageList = view.findViewById<Button>(R.id.reloadImageList)
         val swiperereshlayout = view.findViewById<SwipeRefreshLayout>(R.id.swiperereshlayout)
         this.imageGrid!!.adapter = adapter
-        this.loadingMore(Requester.apiService().getAnimephone(page = 1), 1)
+        this.loadingMore(Requester.ImageService().getAnimephone(page = 1), 1)
 
         reloadImageList.setOnClickListener {
-            this.loadingMore(Requester.apiService().getAnimephone(page = 1), 1)
+            this.loadingMore(Requester.ImageService().getAnimephone(page = 1), 1)
         }
 
         // 滚动条自动加载下一页
@@ -49,7 +49,7 @@ class FragmentPhone: BaseFFragment() {
                 val page : Int = length / 10 + 1
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && length%10 == 0
                         && length-1 == view!!.lastVisiblePosition){
-                    this@FragmentPhone.loadingMore(Requester.apiService().getAnimephone(page = page), page)
+                    this@FragmentPhone.loadingMore(Requester.ImageService().getAnimephone(page = page), page)
                 }
             }
         })
@@ -73,7 +73,7 @@ class FragmentPhone: BaseFFragment() {
             //设置2秒的时间来执行以下事件
             Handler().postDelayed(Runnable {
                 this.imageList.clear()
-                this.loadingMore(Requester.apiService().getAnimephone(page = 1), 1)
+                this.loadingMore(Requester.ImageService().getAnimephone(page = 1), 1)
                 this.adapter?.notifyDataSetChanged()
                 swiperereshlayout.isRefreshing = false
             }, 2000)

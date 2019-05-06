@@ -49,32 +49,38 @@ class LoginActivity: AppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.apiService().authLogin(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
+            Requester.AuthService().authLogin(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
                 override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val u = response.body()!!
 
-                    Requester.apiService().getUserinfo(token = u.data).enqueue(object: Callback<UserInfoBean> {
-                        override fun onResponse(call: Call<UserInfoBean>, response: Response<UserInfoBean>) {
-                            val userInfoData = response.body()!!
-                            val userinfo = ContentValues()
-                            userinfo.put("userid", userInfoData.data.userid)
-                            userinfo.put("token", u.data)
-                            userinfo.put("name", userInfoData.data.name)
-                            userinfo.put("create_time", userInfoData.data.create_time)
-                            userinfo.put("email", userInfoData.data.email)
-                            userinfo.put("sex", userInfoData.data.sex)
-                            userinfo.put("avatar", userInfoData.data.avatar)
-                            this@LoginActivity.database.use {
-                                insert("anime_users","avatar",userinfo)
+                    if (u.code == 200) {
+                        Requester.AuthService().getUserinfo(token = u.data).enqueue(object: Callback<UserInfoBean> {
+                            override fun onResponse(call: Call<UserInfoBean>, response: Response<UserInfoBean>) {
+                                val userInfoData = response.body()!!
+                                val userinfo = ContentValues()
+                                userinfo.put("userid", userInfoData.data.userid)
+                                userinfo.put("token", u.data)
+                                userinfo.put("name", userInfoData.data.name)
+                                userinfo.put("create_time", userInfoData.data.create_time)
+                                userinfo.put("email", userInfoData.data.email)
+                                userinfo.put("sex", userInfoData.data.sex)
+                                userinfo.put("avatar", userInfoData.data.avatar)
+                                this@LoginActivity.database.use {
+                                    insert("anime_users","avatar",userinfo)
+                                }
+                                finish()
                             }
-                            finish()
-                        }
 
-                        override fun onFailure(call: Call<UserInfoBean>, t: Throwable) {
-                            Toast.makeText(this@LoginActivity, "验证失败了!", Toast.LENGTH_LONG).show()
-                        }
-                    })
+                            override fun onFailure(call: Call<UserInfoBean>, t: Throwable) {
+                                Toast.makeText(this@LoginActivity, "验证失败了!", Toast.LENGTH_LONG).show()
+                            }
+                        })
+
+                    } else {
+                        Toast.makeText(this@LoginActivity, "该账号不存在！", Toast.LENGTH_SHORT).show()
+                    }
+
 
                 }
 

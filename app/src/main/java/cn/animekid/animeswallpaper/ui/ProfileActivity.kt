@@ -38,7 +38,7 @@ class ProfileActivity: AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
             dialog.setTitle("提示").setSingleChoiceItems(sexarry, 0, DialogInterface.OnClickListener { dialog, which ->
                 Log.d("tag", sexarry[which])
-                Requester.apiService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = "", sex = sexarry[which]).enqueue(object: Callback<ResponseDataBean> {
+                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = "", sex = sexarry[which]).enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         user_sex.text = sexarry[which]
                         this@ProfileActivity._userinfo!!.sex = sexarry[which]
@@ -63,7 +63,7 @@ class ProfileActivity: AppCompatActivity() {
             dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
                 val newName = newview.findViewById<EditText>(R.id.new_name).text.toString()
                 if (TextUtils.isEmpty(newName)) { return@OnClickListener }
-                Requester.apiService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = newName, sex = "").enqueue(object: Callback<ResponseDataBean> {
+                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = newName, sex = "").enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         user_name.text = newName
                         this@ProfileActivity._userinfo!!.name = newName

@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.setTitle("提示")
                 dialog.setMessage("确认注销当前账号吗？")
                 dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
-                    Requester.apiService().authLogout(token = ToolsHelper.getToken(this@MainActivity), authtoken = this._userinfo!!.token).enqueue(object: Callback<ResponseDataBean> {
+                    Requester.AuthService().authLogout(token = ToolsHelper.getToken(this@MainActivity), authtoken = this._userinfo!!.token).enqueue(object: Callback<ResponseDataBean> {
                         override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                             this@MainActivity.database.use {
                                 delete("anime_users")

@@ -32,10 +32,10 @@ class FragmentPC: BaseFFragment() {
         val reloadImageList = view.findViewById<Button>(R.id.reloadImageList)
         val swiperereshlayout = view.findViewById<SwipeRefreshLayout>(R.id.swiperereshlayout)
         this.imageGrid!!.adapter = adapter
-        this.loadingMore(Requester.apiService().getAnimepc(page = 1), 1)
+        this.loadingMore(Requester.ImageService().getAnimepc(page = 1), 1)
 
         reloadImageList.setOnClickListener {
-            this.loadingMore(Requester.apiService().getAnimepc(page = 1), 1)
+            this.loadingMore(Requester.ImageService().getAnimepc(page = 1), 1)
         }
 
         this.imageGrid!!.setOnScrollListener(object: AbsListView.OnScrollListener{
@@ -46,7 +46,7 @@ class FragmentPC: BaseFFragment() {
                 val page : Int = length / 10 + 1
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && length%10 == 0
                         && length-1 == view!!.lastVisiblePosition){
-                    this@FragmentPC.loadingMore(Requester.apiService().getAnimepc(page = page), page)
+                    this@FragmentPC.loadingMore(Requester.ImageService().getAnimepc(page = page), page)
                 }
             }
         })
@@ -67,7 +67,7 @@ class FragmentPC: BaseFFragment() {
             //设置2秒的时间来执行以下事件
             Handler().postDelayed(Runnable {
                 this.imageList.clear()
-                this.loadingMore(Requester.apiService().getAnimepc(page = 1), 1)
+                this.loadingMore(Requester.ImageService().getAnimepc(page = 1), 1)
                 this.adapter?.notifyDataSetChanged()
                 swiperereshlayout.isRefreshing = false
             }, 2000)

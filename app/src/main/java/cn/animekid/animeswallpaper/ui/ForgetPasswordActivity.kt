@@ -31,7 +31,7 @@ class ForgetPasswordActivity: AppCompatActivity() {
                 return@setOnClickListener
             }
             Toast.makeText(this, "重置链接已发送,请注意查收!", Toast.LENGTH_SHORT).show()
-            Requester.apiService().forgetPassword(email = user_email).enqueue(object: Callback<ResponseDataBean> {
+            Requester.AuthService().forgetPassword(email = user_email).enqueue(object: Callback<ResponseDataBean> {
                 override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                     val c = response.body()!!
                     if (c.code == 200) {

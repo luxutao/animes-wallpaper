@@ -58,7 +58,7 @@ class SettingsActivity: AppCompatActivity() {
             dialog.setTitle("警告")
             dialog.setMessage("确认删除当前账号吗？")
             dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
-                Requester.apiService().delUser(token = ToolsHelper.getToken(this@SettingsActivity), authid = this._userinfo!!.userid).enqueue(object: Callback<ResponseDataBean> {
+                Requester.AuthService().delUser(token = ToolsHelper.getToken(this@SettingsActivity), authid = this._userinfo!!.userid).enqueue(object: Callback<ResponseDataBean> {
                     override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                         this@SettingsActivity.database.use {
                             delete("anime_users")

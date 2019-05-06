@@ -41,34 +41,24 @@ class Requester {
         }
 
         //可用于多种不同种类的请求
-        fun apiService(): AnimeService {
-            return getService(AnimeService.baseUrl, AnimeService::class.java)
+        fun ImageService(): ImageService {
+            return getService(ImageService.baseUrl, ImageService::class.java)
+        }
+
+        //可用于多种不同种类的请求
+        fun AuthService(): AuthService {
+            return getService(AuthService.baseUrl, AuthService::class.java)
         }
 
     }
 
 }
 
-
-interface AnimeService {
+interface AuthService {
 
     companion object {
-        //此类接口的基地址
-        val baseUrl = "https://api.animekid.cn/api/animewallpaper/"
+        val baseUrl = "https://api.animekid.cn/api/auth/"
     }
-
-    @GET("getAnimepc")
-    fun getAnimepc(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimepc"), @Query("page") page: Int): Call<ImageDataBean>
-
-    @GET("getAnimephone")
-    fun getAnimephone(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimephone"), @Query("page") page: Int): Call<ImageDataBean>
-
-    @GET("getBing")
-    fun getBing(@Query("ticket") ticket: String = ToolsHelper.getTicket("getBing"), @Query("page") page: Int): Call<ImageDataBean>
-
-    @FormUrlEncoded
-    @POST("addCount")
-    fun addLikes(@Query("token") token: String, @Field("addid") addid: Int): Call<ResponseDataBean>
 
     @FormUrlEncoded
     @POST("login")
@@ -100,6 +90,29 @@ interface AnimeService {
 
     @GET("getUserinfo")
     fun getUserinfo(@Query("token") token: String): Call<UserInfoBean>
+
+}
+
+
+interface ImageService {
+
+    companion object {
+        //此类接口的基地址
+        val baseUrl = "https://api.animekid.cn/api/animewallpaper/"
+    }
+
+    @GET("getAnimepc")
+    fun getAnimepc(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimepc"), @Query("page") page: Int): Call<ImageDataBean>
+
+    @GET("getAnimephone")
+    fun getAnimephone(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimephone"), @Query("page") page: Int): Call<ImageDataBean>
+
+    @GET("getBing")
+    fun getBing(@Query("ticket") ticket: String = ToolsHelper.getTicket("getBing"), @Query("page") page: Int): Call<ImageDataBean>
+
+    @FormUrlEncoded
+    @POST("addCount")
+    fun addLikes(@Query("token") token: String, @Field("addid") addid: Int): Call<ResponseDataBean>
 
     @Multipart
     @POST("uploadImage")

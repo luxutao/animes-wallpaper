@@ -31,10 +31,10 @@ class FragmentBing: BaseFFragment() {
         val reloadImageList = view.findViewById<Button>(R.id.reloadImageList)
         val swiperereshlayout = view.findViewById<SwipeRefreshLayout>(R.id.swiperereshlayout)
         this.imageGrid!!.adapter = adapter
-        this.loadingMore(Requester.apiService().getBing(page = 1), 1)
+        this.loadingMore(Requester.ImageService().getBing(page = 1), 1)
 
         reloadImageList.setOnClickListener {
-            this.loadingMore(Requester.apiService().getBing(page = 1), 1)
+            this.loadingMore(Requester.ImageService().getBing(page = 1), 1)
 
         }
 
@@ -46,7 +46,7 @@ class FragmentBing: BaseFFragment() {
                 val page : Int = length / 10 + 1
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && length%10 == 0
                         && length-1 == view!!.lastVisiblePosition){
-                    this@FragmentBing.loadingMore(Requester.apiService().getBing(page = page), page)
+                    this@FragmentBing.loadingMore(Requester.ImageService().getBing(page = page), page)
                 }
             }
         })
@@ -67,7 +67,7 @@ class FragmentBing: BaseFFragment() {
             //设置2秒的时间来执行以下事件
             Handler().postDelayed(Runnable {
                 imageList.clear()
-                this.loadingMore(Requester.apiService().getBing(page = 1), 1)
+                this.loadingMore(Requester.ImageService().getBing(page = 1), 1)
                 adapter?.notifyDataSetChanged()
                 swiperereshlayout.isRefreshing = false
             }, 2000)

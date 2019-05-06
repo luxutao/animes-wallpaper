@@ -34,7 +34,7 @@ class RegisterActivity: AppCompatActivity() {
                 return@setOnClickListener
             }
             Toast.makeText(this, "验证码已发送,请注意查收!", Toast.LENGTH_SHORT).show()
-            Requester.apiService().sendCaptcha(email = user_email).enqueue(object: Callback<ResponseDataBean> {
+            Requester.AuthService().sendCaptcha(email = user_email).enqueue(object: Callback<ResponseDataBean> {
                 override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                     val c = response.body()!!
                     if (c.code == 200) {
@@ -65,7 +65,7 @@ class RegisterActivity: AppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.apiService().authRegister(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
+            Requester.AuthService().authRegister(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
                 override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val res = response.body()!!
