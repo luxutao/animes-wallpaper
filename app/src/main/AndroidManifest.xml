@@ -27,11 +27,6 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.DetailActivity"
-            android:label="@string/str_detail"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
             android:name=".ui.LoginActivity"
             android:label="@string/str_login"
             android:theme="@style/AppTheme.NoActionBar">

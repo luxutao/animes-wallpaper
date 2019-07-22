@@ -40,6 +40,7 @@ dependencies {
     // 加载异步和sqlite
     implementation "org.jetbrains.anko:anko-coroutines:0.10.7"
     implementation "org.jetbrains.anko:anko-sqlite:0.10.7"
+    implementation 'com.bm.photoview:library:1.4.1'
 }
 
 androidExtensions {

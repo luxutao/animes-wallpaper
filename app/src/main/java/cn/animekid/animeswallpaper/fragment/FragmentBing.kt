@@ -3,9 +3,7 @@ package cn.animekid.animeswallpaper.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +11,8 @@ import android.widget.*
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.adapter.ImageAdapter
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ImageDataBean
 import cn.animekid.animeswallpaper.data.DataParcelable
-import cn.animekid.animeswallpaper.ui.DetailActivity
-import cn.animekid.animeswallpaper.utils.ToolsHelper
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import cn.animekid.animeswallpaper.utils.ImageDialog
 
 class FragmentBing: BaseFFragment() {
 
@@ -53,11 +46,7 @@ class FragmentBing: BaseFFragment() {
         this.imageGrid!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val index = parent.getItemIdAtPosition(position)
             val bean = imageList.get(index.toInt())
-            val request = DataParcelable(bean.image_album_id,bean.image_date,bean.image_date_gmt,bean.image_extension,bean.image_height,
-                    bean.image_id,bean.image_likes,bean.image_medium,bean.image_name,bean.image_size,bean.image_source,bean.image_thumb,bean.image_width)
-            val intent = Intent(this.context, DetailActivity::class.java)
-            intent.putExtra("imagebean", request)
-            startActivity(intent)
+            ImageDialog(view.context).showLoading(bean)
         }
 
         swiperereshlayout.setColorSchemeResources(android.R.color.holo_blue_bright,
