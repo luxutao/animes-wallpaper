@@ -78,18 +78,18 @@ class FragmentUpload: Fragment() {
         val intent = Intent()
         intent.setAction(Intent.ACTION_PICK)
         intent.setType("image/*")
-        startActivityForResult(intent,2)
+        startActivityForResult(intent,200)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && data != null) {
-            this.uploadPath = PhotoAlobum().getRealPathFromUri(this.context!!, data.data).toString()
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 200 && resultCode == RESULT_OK) {
+            this.uploadPath = PhotoAlobum().getRealPathFromUri(this.context!!, data!!.data).toString()
             Glide.with(this.view!!).load(this.uploadPath).into(this.previewImage)
             this.previewImage.visibility = View.VISIBLE
             this.choiceImage.visibility = View.GONE
             this.buttonGroup.visibility = View.VISIBLE
         }
 
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

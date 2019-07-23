@@ -6,6 +6,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/mob"/>
+        android:src="@drawable/anime_wallpaper_latest"/>
 
 </android.support.constraint.ConstraintLayout>

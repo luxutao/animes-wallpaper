@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -15,7 +16,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
@@ -48,6 +49,8 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
     private var isExit: Boolean = false
     private var currentFragment: Fragment? = null
     private var islogin: Boolean = false
+    private var permissions: Array<String> = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA)
     private var handler: Handler = @SuppressLint("HandlerLeak")
     object: Handler() {
         override fun handleMessage(msg: Message?) {
@@ -72,11 +75,7 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
         }
 
         // 申请权限
-        val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        val hasWriteStoragePermission = ContextCompat.checkSelfPermission(getApplication(), permission)
-        if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
-            myRequestPermission()
-        }
+        this.RequestPermission()
 
         // 打开默认页
         openFragment(FragmentPC.newInstance(), "pc")
@@ -138,10 +137,13 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_camera -> {
-                // Handle the camera action
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(intent, 100)
             }
             R.id.nav_gallery -> {
-
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setType("image/*")
+                startActivityForResult(intent, 101)
             }
             R.id.nav_profile -> {
                 val intent = Intent(this, ProfileActivity::class.java)
@@ -240,23 +242,28 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
 
 
     // 我的请求权限
-    private fun myRequestPermission() {
+    private fun RequestPermission() {
         //可以添加多个权限申请
-        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        requestPermissions(permissions,1)
+        val permissions: ArrayList<String> = arrayListOf()
+        val _permissions: Array<String> = arrayOf()
+        for (permission in this.permissions) {
+            if (ContextCompat.checkSelfPermission(getApplication(), permission) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(permission)
+            }
+        }
+        if (permissions.size != 0) {
+            requestPermissions(permissions.toArray(_permissions),1)
+        }
     }
 
     // 重写请求权限结果
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == 1) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE) {
-                //todo:permission granted
-                Toast.makeText(this@MainActivity,"权限允许",Toast.LENGTH_SHORT).show()
-            } else {
-                //todo:permission denied
-                Toast.makeText(this@MainActivity,"权限拒绝",Toast.LENGTH_SHORT).show()
-                System.exit(0)
+            for (permiss in grantResults) {
+                if (permiss == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this@MainActivity,"权限拒绝",Toast.LENGTH_SHORT).show()
+                    System.exit(0)
+                }
             }
         }
     }
@@ -267,7 +274,6 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
             exit()
             return false
         }
-
         return super.onKeyDown(keyCode, event)
     }
 
@@ -286,5 +292,13 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            val imageBitmap = data!!.extras.get("data") as Bitmap
+            MediaStore.Images.Media.insertImage(getContentResolver(), imageBitmap, "" , "")
+        }
     }
 }
