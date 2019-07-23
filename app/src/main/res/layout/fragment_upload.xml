@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
+    <com.bm.library.PhotoView
+        android:id="@+id/preview_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
-        <cn.animekid.animeswallpaper.utils.ZoomImageView
-            android:id="@+id/previewImage"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="matrix"
-            android:adjustViewBounds="true"
-            android:visibility="gone"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/choiceImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:background="@drawable/ic_plus"
-                android:visibility="visible"/>
-
-            <LinearLayout
-                android:id="@+id/bottonGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/rechoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:text="重新选择"
-                    android:background="#ffffff"
-                    android:textColor="#000"/>
-
-                <Button
-                    android:id="@+id/upload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:text="开始上传"
-                    android:background="#ffffff"
-                    android:textColor="#000" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/choice_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_plus"
+            android:visibility="visible"/>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:gravity="bottom">
+
+        <LinearLayout
+            android:id="@+id/button_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/rechoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:text="重新选择"
+                android:background="@drawable/radius_border"
+                android:textColor="#000"/>
+
+            <Button
+                android:id="@+id/begin_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:text="开始上传"
+                android:background="@drawable/radius_border"
+                android:textColor="#000" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

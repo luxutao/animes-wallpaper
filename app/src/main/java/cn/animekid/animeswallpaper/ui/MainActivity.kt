@@ -26,8 +26,9 @@ import android.widget.TextView
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.BasicResponse
+import cn.animekid.animeswallpaper.data.UserInfo
+import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.fragment.FragmentBing
 import cn.animekid.animeswallpaper.fragment.FragmentPC
 import cn.animekid.animeswallpaper.fragment.FragmentPhone
@@ -42,12 +43,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var isExit: Boolean = false
     private var currentFragment: Fragment? = null
-    private var navheaderView: View? = null
-    private var _userinfo: UserInfoBean.Data? = null
+    private var islogin: Boolean = false
     private var handler: Handler = @SuppressLint("HandlerLeak")
     object: Handler() {
         override fun handleMessage(msg: Message?) {
@@ -55,17 +55,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             isExit = false
         }
     }
+    private lateinit var navheaderView: View
+    private lateinit var _userinfo: UserInfoData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
         // 加载侧边栏顶部头像区域
-        navheaderView = nav_view.inflateHeaderView(R.layout.nav_header_main)
+        this.navheaderView = nav_view.inflateHeaderView(R.layout.nav_header_main)
 
-        this.navheaderView!!.findViewById<ImageView>(R.id.user_avatar).setOnClickListener {
-            if (_userinfo == null) {
+        this.navheaderView.findViewById<ImageView>(R.id.user_avatar).setOnClickListener {
+            if (this.islogin == false) {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
             }
@@ -155,9 +155,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val dialog = AlertDialog.Builder(this)
                 val newview = View.inflate(this, R.layout.share_dialog, null)
                 dialog.setTitle("提示").setView(newview)
-                dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
+                dialog.setPositiveButton("确认") { t_dialog, which ->
 
-                })
+                }
                 dialog.setNegativeButton("取消", null)
                 dialog.create().show()
             }
@@ -165,29 +165,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val dialog = AlertDialog.Builder(this)
                 dialog.setTitle("提示")
                 dialog.setMessage("确认注销当前账号吗？")
-                dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
-                    Requester.AuthService().authLogout(token = ToolsHelper.getToken(this@MainActivity), authtoken = this._userinfo!!.token).enqueue(object: Callback<ResponseDataBean> {
-                        override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+                dialog.setPositiveButton("确认") { t_dialog, which ->
+                    Requester.AuthService().authLogout(token = ToolsHelper.getToken(this@MainActivity), authtoken = this._userinfo.token).enqueue(object: Callback<BasicResponse> {
+                        override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                             this@MainActivity.database.use {
                                 delete("anime_users")
                             }
                             Log.d("logoutSuccess","success")
                             // 注销账号后将动态数据还原
-                            this@MainActivity.navheaderView!!.findViewById<ImageView>(R.id.user_avatar).setImageResource(R.drawable.default_avatar)
-                            this@MainActivity.navheaderView!!.findViewById<TextView>(R.id.user_email).text = getString(R.string.nav_header_subtitle)
-                            this@MainActivity.navheaderView!!.findViewById<TextView>(R.id.user_name).text = getString(R.string.nav_header_title)
+                            this@MainActivity.navheaderView.findViewById<ImageView>(R.id.user_avatar).setImageResource(R.drawable.default_avatar)
+                            this@MainActivity.navheaderView.findViewById<TextView>(R.id.user_email).text = getString(R.string.nav_header_subtitle)
+                            this@MainActivity.navheaderView.findViewById<TextView>(R.id.user_name).text = getString(R.string.nav_header_title)
                             // 获取侧边栏下面的按钮,设置隐藏属性
                             nav_view.menu.findItem(R.id.nav_logout).isVisible = false
-                            _userinfo = null
+                            nav_view.menu.findItem(R.id.nav_profile).isVisible = false
+                            this@MainActivity.islogin = false
                             Toast.makeText(this@MainActivity, "注销账号成功", Toast.LENGTH_SHORT).show()
                         }
 
-                        override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                             Log.d("logoutError",t.message)
                         }
                     })
 
-                })
+                }
                 dialog.setNegativeButton("取消", null)
                 dialog.create().show()
             }
@@ -199,34 +200,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        val userinfo = this.getData(classParser<UserInfoBean.Data>())
-        if (userinfo.count() > 0) {
-            _userinfo = userinfo.first()
-            Log.d("tag", _userinfo.toString())
-            if (this._userinfo!!.avatar != "F") {
-                Glide.with(this).load(this._userinfo!!.avatar).into(this.navheaderView!!.findViewById<ImageView>(R.id.user_avatar))
+        this.getData()
+        if (this.UserInfoList.count() > 0) {
+            this.islogin = true
+            this._userinfo = this.UserInfoList.first()
+            if (this._userinfo.avatar != "F") {
+                Glide.with(this).load(this._userinfo.avatar).into(this.navheaderView.findViewById(R.id.user_avatar))
             }
-            this.navheaderView!!.findViewById<TextView>(R.id.user_email).text = this._userinfo!!.email
-            this.navheaderView!!.findViewById<TextView>(R.id.user_name).text = this._userinfo!!.name
+            this.navheaderView.findViewById<TextView>(R.id.user_email).text = this._userinfo.email
+            this.navheaderView.findViewById<TextView>(R.id.user_name).text = this._userinfo.name
             nav_view.menu.findItem(R.id.nav_logout).isVisible = true
             nav_view.menu.findItem(R.id.nav_profile).isVisible = true
         } else {
-            _userinfo = null
-            this.navheaderView!!.findViewById<TextView>(R.id.user_email).text = getString(R.string.nav_header_subtitle)
-            this.navheaderView!!.findViewById<TextView>(R.id.user_name).text = getString(R.string.nav_header_title)
+            this.navheaderView.findViewById<TextView>(R.id.user_email).text = getString(R.string.nav_header_subtitle)
+            this.navheaderView.findViewById<TextView>(R.id.user_name).text = getString(R.string.nav_header_title)
             nav_view.menu.findItem(R.id.nav_logout).isVisible = false
             nav_view.menu.findItem(R.id.nav_profile).isVisible = false
         }
-    }
-
-    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
-        val itemdata = this.database.use {
-            select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserInfoBean.Data> = parseList(parser)
-                return@exec itemlist
-            }
-        }
-        return itemdata
     }
 
     // 切换fragment保存状态
@@ -292,5 +282,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             finish()
             System.exit(0)
         }
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
     }
 }

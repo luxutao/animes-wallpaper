@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import retrofit2.Call
-import cn.animekid.animeswallpaper.data.ImageDataBean
-import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.BasicResponse
+import cn.animekid.animeswallpaper.data.ImageList
+import cn.animekid.animeswallpaper.data.UserInfo
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
@@ -62,34 +62,34 @@ interface AuthService {
 
     @FormUrlEncoded
     @POST("login")
-    fun authLogin(@Query("ticket") ticket: String = ToolsHelper.getTicket("login"), @Field("email") email: String, @Field("password") password: String): Call<ResponseDataBean>
+    fun authLogin(@Query("ticket") ticket: String = ToolsHelper.getTicket("login"), @Field("email") email: String, @Field("password") password: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("register")
-    fun authRegister(@Query("ticket") ticket: String = ToolsHelper.getTicket("register"), @Field("email") email: String, @Field("password") password: String): Call<ResponseDataBean>
+    fun authRegister(@Query("ticket") ticket: String = ToolsHelper.getTicket("register"), @Field("email") email: String, @Field("password") password: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("sendCaptcha")
-    fun sendCaptcha(@Query("ticket") ticket: String = ToolsHelper.getTicket("sendCaptcha"), @Field("email") email: String): Call<ResponseDataBean>
+    fun sendCaptcha(@Query("ticket") ticket: String = ToolsHelper.getTicket("sendCaptcha"), @Field("email") email: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("logout")
-    fun authLogout(@Query("token") token: String, @Field("authtoken") authtoken: String): Call<ResponseDataBean>
+    fun authLogout(@Query("token") token: String, @Field("authtoken") authtoken: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("forgetpassword")
-    fun forgetPassword(@Query("ticket") ticket: String = ToolsHelper.getTicket("forgetpassword"), @Field("email") email: String): Call<ResponseDataBean>
+    fun forgetPassword(@Query("ticket") ticket: String = ToolsHelper.getTicket("forgetpassword"), @Field("email") email: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("deluser")
-    fun delUser(@Query("token") token: String, @Field("authid") authid: Int): Call<ResponseDataBean>
+    fun delUser(@Query("token") token: String, @Field("authid") authid: Int): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("changeuser")
-    fun changeProfile(@Query("token") token: String, @Field("email") email: String, @Field("name") name: String,@Field("sex") sex: String): Call<ResponseDataBean>
+    fun changeProfile(@Query("token") token: String, @Field("email") email: String, @Field("name") name: String,@Field("sex") sex: String): Call<BasicResponse>
 
     @GET("getUserinfo")
-    fun getUserinfo(@Query("token") token: String): Call<UserInfoBean>
+    fun getUserinfo(@Query("token") token: String): Call<UserInfo>
 
 }
 
@@ -101,22 +101,16 @@ interface ImageService {
         val baseUrl = "https://api.animekid.cn/api/animewallpaper/"
     }
 
-    @GET("getAnimepc")
-    fun getAnimepc(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimepc"), @Query("page") page: Int): Call<ImageDataBean>
-
-    @GET("getAnimephone")
-    fun getAnimephone(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnimephone"), @Query("page") page: Int): Call<ImageDataBean>
-
-    @GET("getBing")
-    fun getBing(@Query("ticket") ticket: String = ToolsHelper.getTicket("getBing"), @Query("page") page: Int): Call<ImageDataBean>
+    @GET("getWallpaper")
+    fun getWallpaper(@Query("ticket") ticket: String = ToolsHelper.getTicket("getWallpaper"), @Query("page") page: Int, @Query("tag") tag: String): Call<ImageList>
 
     @FormUrlEncoded
     @POST("addCount")
-    fun addLikes(@Query("token") token: String, @Field("addid") addid: Int): Call<ResponseDataBean>
+    fun addLikes(@Query("token") token: String, @Field("addid") addid: Int): Call<BasicResponse>
 
     @Multipart
     @POST("uploadImage")
-    fun uploadImage(@Query("token") token: String, @Part file: MultipartBody.Part): Call<ResponseDataBean>
+    fun uploadImage(@Query("token") token: String, @Part file: MultipartBody.Part): Call<BasicResponse>
 }
 
 

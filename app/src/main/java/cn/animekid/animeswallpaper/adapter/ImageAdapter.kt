@@ -8,14 +8,14 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import cn.animekid.animeswallpaper.R
-import cn.animekid.animeswallpaper.data.ImageDataBean
+import cn.animekid.animeswallpaper.data.ImageListData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
 import java.util.*
 
 
-class ImageAdapter(private val _context: Context, private val _list: ArrayList<ImageDataBean.Data>) : BaseAdapter() {
+class ImageAdapter(private val _context: Context, private val _list: ArrayList<ImageListData>) : BaseAdapter() {
 
     override fun getCount(): Int {
         return _list.size
@@ -51,7 +51,7 @@ class ImageAdapter(private val _context: Context, private val _list: ArrayList<I
         return v
     }
 
-    class ImageViewHolder(var viewItem: View) {
+    class ImageViewHolder(viewItem: View) {
         var image: ImageView = viewItem.findViewById(R.id.imageItem) as ImageView
         var count: TextView = viewItem.findViewById(R.id.downloadCount) as TextView
 

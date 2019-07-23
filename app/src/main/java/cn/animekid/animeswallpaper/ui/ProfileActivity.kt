@@ -11,8 +11,9 @@ import android.view.View
 import android.widget.EditText
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.BasicResponse
+import cn.animekid.animeswallpaper.data.UserInfo
+import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
@@ -22,37 +23,32 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileActivity: AppCompatActivity() {
+class ProfileActivity: BaseAAppCompatActivity() {
 
-    private var _userinfo:UserInfoBean.Data? = null
+    private lateinit var _userinfo: UserInfoData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.profile)
-        setSupportActionBar(this.findViewById<android.support.v7.widget.Toolbar>(R.id.toolbar))
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         line_sex.setOnClickListener {
-            val sexarry = arrayOf("男","女")
+            val sex_array = arrayOf("男","女")
             val dialog = AlertDialog.Builder(this)
-            dialog.setTitle("提示").setSingleChoiceItems(sexarry, 0, DialogInterface.OnClickListener { dialog, which ->
-                Log.d("tag", sexarry[which])
-                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = "", sex = sexarry[which]).enqueue(object: Callback<ResponseDataBean> {
-                    override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
-                        user_sex.text = sexarry[which]
-                        this@ProfileActivity._userinfo!!.sex = sexarry[which]
+            dialog.setTitle("提示").setSingleChoiceItems(sex_array, 0) { t_dialog, which ->
+                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo.email, name = "", sex = sex_array[which]).enqueue(object: Callback<BasicResponse> {
+                    override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                        user_sex.text = sex_array[which]
+                        this@ProfileActivity._userinfo.sex = sex_array[which]
                         this@ProfileActivity.database.use {
-                            update("anime_users","sex" to sexarry[which]).whereArgs("userid="+this@ProfileActivity._userinfo!!.userid).exec()
+                            update("anime_users","sex" to sex_array[which]).whereArgs("userid="+this@ProfileActivity._userinfo.userid).exec()
                         }
-                        dialog.dismiss()
+                        t_dialog.dismiss()
                     }
 
-                    override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
-                        Log.d("logoutError",t.message)
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                        Log.d("Error",t.message)
                     }
                 })
-            })
+            }
             dialog.create().show()
         }
 
@@ -60,19 +56,19 @@ class ProfileActivity: AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
             val newview = View.inflate(this, R.layout.change_profile_name, null)
             dialog.setTitle("提示").setView(newview)
-            dialog.setPositiveButton("确认", DialogInterface.OnClickListener { dialog, which ->
+            dialog.setPositiveButton("确认", DialogInterface.OnClickListener { t_dialog, which ->
                 val newName = newview.findViewById<EditText>(R.id.new_name).text.toString()
                 if (TextUtils.isEmpty(newName)) { return@OnClickListener }
-                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo!!.email, name = newName, sex = "").enqueue(object: Callback<ResponseDataBean> {
-                    override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+                Requester.AuthService().changeProfile(token = ToolsHelper.getToken(this@ProfileActivity), email = this._userinfo.email, name = newName, sex = "").enqueue(object: Callback<BasicResponse> {
+                    override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                         user_name.text = newName
-                        this@ProfileActivity._userinfo!!.name = newName
+                        this@ProfileActivity._userinfo.name = newName
                         this@ProfileActivity.database.use {
-                            update("anime_users","name" to newName).whereArgs("userid="+this@ProfileActivity._userinfo!!.userid).exec()
+                            update("anime_users","name" to newName).whereArgs("userid="+this@ProfileActivity._userinfo.userid).exec()
                         }
                     }
 
-                    override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                         Log.d("logoutError",t.message)
                     }
                 })
@@ -83,39 +79,21 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val userinfo = this.getData(classParser<UserInfoBean.Data>())
-        if (userinfo.count() > 0) {
-            _userinfo = userinfo.first()
-            user_name.text = this._userinfo!!.name
-            user_sex.text = this._userinfo!!.sex
-            if (this._userinfo!!.avatar != "F") {
-                Glide.with(this).load(this._userinfo!!.avatar).into(user_avatar)
+    override fun onStart() {
+        super.onStart()
+        if (this.UserInfoList.count() > 0) {
+            this._userinfo = this.UserInfoList.first()
+            user_name.text = this._userinfo.name
+            user_sex.text = this._userinfo.sex
+            if (this._userinfo.avatar != "F") {
+                Glide.with(this).load(this._userinfo.avatar).into(user_avatar)
             }
             Log.d("tag", _userinfo.toString())
         }
     }
 
-    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
-        val itemdata = this.database.use {
-            select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserInfoBean.Data> = parseList(parser)
-                return@exec itemlist
-            }
-        }
-        return itemdata
-    }
-
-    // 监听导航栏按钮
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-        when (item.itemId) {
-            android.R.id.home -> {
-                this.finish()
-            }
-        }
-        return true
+    override fun getLayoutId(): Int {
+        return R.layout.profile
     }
 
 }

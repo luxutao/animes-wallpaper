@@ -6,4 +6,6 @@
     <color name="colorGray">#b9b8b8</color>
     <color name="colorLucency">#3bdfdcdc</color>
     <color name="colorBorder">#98c2f4</color>
+    <color name="colorStatusBar">#ff0005</color>
+    <color name="colorWindowBar">#ff0005</color>
 </resources>

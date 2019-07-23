@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ResponseDataBean
+import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import kotlinx.android.synthetic.main.register.*
 import retrofit2.Call
@@ -16,16 +16,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class RegisterActivity: AppCompatActivity() {
+class RegisterActivity: BaseAAppCompatActivity() {
 
     private var _Captcha: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.register)
-        setSupportActionBar(this.findViewById<android.support.v7.widget.Toolbar>(R.id.toolbar))
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         send_captcha.setOnClickListener {
             val user_email = email.text.toString()
@@ -34,15 +30,15 @@ class RegisterActivity: AppCompatActivity() {
                 return@setOnClickListener
             }
             Toast.makeText(this, "验证码已发送,请注意查收!", Toast.LENGTH_SHORT).show()
-            Requester.AuthService().sendCaptcha(email = user_email).enqueue(object: Callback<ResponseDataBean> {
-                override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+            Requester.AuthService().sendCaptcha(email = user_email).enqueue(object: Callback<BasicResponse> {
+                override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     val c = response.body()!!
                     if (c.code == 200) {
                         _Captcha = c.data
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                     Log.d("send_captcha", t.message)
                     Toast.makeText(this@RegisterActivity, "验证码发送失败,请稍后再试.", Toast.LENGTH_SHORT).show()
                 }
@@ -65,8 +61,8 @@ class RegisterActivity: AppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.AuthService().authRegister(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
-                override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+            Requester.AuthService().authRegister(email = user_email, password = user_password).enqueue(object: Callback<BasicResponse> {
+                override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val res = response.body()!!
                     if (res.code == 200) {
@@ -78,7 +74,7 @@ class RegisterActivity: AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                     Log.d("login_error", t.message)
                     Toast.makeText(this@RegisterActivity, "注册错误,请检查网络是否正常!", Toast.LENGTH_LONG).show()
                 }
@@ -91,15 +87,7 @@ class RegisterActivity: AppCompatActivity() {
 
     }
 
-    // 监听导航栏按钮
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-        when (item.itemId) {
-            android.R.id.home -> {
-                this.finish()
-            }
-        }
-        return true
+    override fun getLayoutId(): Int {
+        return R.layout.register
     }
-
 }

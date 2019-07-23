@@ -54,7 +54,7 @@ class ClearCache {
      * 格式化单位
      * @param size
      */
-    public fun getFormatSize(size: Double): String {
+    fun getFormatSize(size: Double): String {
         val megaByte: Double = size / 1024 / 1024
         val result2: BigDecimal = BigDecimal(megaByte.toString())
         return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -66,7 +66,7 @@ class ClearCache {
      *
      * @param path
      */
-    public fun clearCache(path: String): Boolean {
+    fun clearCache(path: String): Boolean {
         var flag: Boolean = false
         val file: File = File(path)
         if (!file.exists()) {

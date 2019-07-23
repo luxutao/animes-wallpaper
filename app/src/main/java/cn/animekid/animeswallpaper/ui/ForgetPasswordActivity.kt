@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ResponseDataBean
+import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import kotlinx.android.synthetic.main.forget_password.*
 import retrofit2.Call
@@ -15,14 +15,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ForgetPasswordActivity: AppCompatActivity() {
+class ForgetPasswordActivity: BaseAAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.forget_password)
-        setSupportActionBar(this.findViewById<android.support.v7.widget.Toolbar>(R.id.toolbar))
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         forget.setOnClickListener {
             val user_email = email.text.toString()
@@ -31,15 +27,15 @@ class ForgetPasswordActivity: AppCompatActivity() {
                 return@setOnClickListener
             }
             Toast.makeText(this, "重置链接已发送,请注意查收!", Toast.LENGTH_SHORT).show()
-            Requester.AuthService().forgetPassword(email = user_email).enqueue(object: Callback<ResponseDataBean> {
-                override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+            Requester.AuthService().forgetPassword(email = user_email).enqueue(object: Callback<BasicResponse> {
+                override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     val c = response.body()!!
                     if (c.code == 200) {
                         finish()
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                     Log.d("send_captcha", t.message)
                     Toast.makeText(this@ForgetPasswordActivity, "发送失败,请稍后再试.", Toast.LENGTH_SHORT).show()
                 }
@@ -47,6 +43,10 @@ class ForgetPasswordActivity: AppCompatActivity() {
         }
 
         login.setOnClickListener { finish() }
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.forget_password
     }
 
 }

@@ -2,7 +2,7 @@ package cn.animekid.animeswallpaper.utils
 
 import android.content.Context
 import android.util.Base64
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.UserInfoData
 import org.jetbrains.anko.db.*
 import java.util.regex.Pattern
 
@@ -10,10 +10,10 @@ object ToolsHelper {
 
 
     /**
-     * method is used for checking valid email id format.
+     * 检查是否是有效的邮箱
      *
      * @param email
-     * @return boolean true for valid false for invalid
+     * @return boolean
      */
     fun isEmailValid(email: String): Boolean {
         var isValid = false
@@ -28,6 +28,12 @@ object ToolsHelper {
         return isValid
     }
 
+    /**
+     * 获取ticket
+     *
+     * @param path
+     * @return string
+     */
     fun getTicket(path: String): String {
         val enstr = "LRnS4t"
         val timestamp = System.currentTimeMillis() / 1000
@@ -38,7 +44,7 @@ object ToolsHelper {
     fun getToken(ctx: Context): String {
         val userinfo = ctx.database.use {
             select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val userinfo: UserInfoBean.Data = parseSingle(classParser<UserInfoBean.Data>())
+                val userinfo: UserInfoData = parseSingle(classParser<UserInfoData>())
                 return@exec userinfo
             }
         }

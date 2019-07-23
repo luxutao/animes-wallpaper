@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperereshlayout"
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <GridView
-            android:id="@+id/imagePCList"
+            android:id="@+id/image_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -20,7 +20,7 @@
             android:stretchMode="columnWidth" />
 
         <LinearLayout
-            android:id="@+id/noInternet"
+            android:id="@+id/not_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -33,7 +33,7 @@
                 android:src="@drawable/ic_error"/>
 
             <Button
-                android:id="@+id/reloadImageList"
+                android:id="@+id/reload_image_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="重新加载"/>

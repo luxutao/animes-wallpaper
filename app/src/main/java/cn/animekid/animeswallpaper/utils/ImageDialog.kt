@@ -10,9 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ImageDataBean
-import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.*
 import cn.animekid.animeswallpaper.ui.LoginActivity
 import com.bm.library.PhotoView
 import com.bumptech.glide.Glide
@@ -32,7 +30,7 @@ import retrofit2.Response
 
 class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
 
-    fun showLoading(imagebean: ImageDataBean.Data): AlertDialog {
+    fun showLoading(imagebean: ImageListData): AlertDialog {
 
         val dialog = AlertDialog.Builder(mContext).create()
         dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
@@ -56,7 +54,7 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
         BigImageDownload.setOnClickListener {
             val itemdata = mContext.database.use {
                 select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                    val itemlist: List<UserInfoBean.Data> = parseList(classParser<UserInfoBean.Data>())
+                    val itemlist: List<UserInfoData> = parseList(classParser<UserInfoData>())
                     return@exec itemlist
                 }
             }
@@ -70,13 +68,14 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
                     Toast.makeText(mContext, text, Toast.LENGTH_SHORT).show()
                 }
 
-                Requester.ImageService().addLikes(token = ToolsHelper.getToken(mContext), addid = imagebean.image_id).enqueue(object : Callback<ResponseDataBean> {
-                    override fun onResponse(call: Call<ResponseDataBean>?, response: Response<ResponseDataBean>?) {
+                Requester.ImageService().addLikes(token = ToolsHelper.getToken(mContext), addid = imagebean.image_id).enqueue(object : Callback<BasicResponse> {
+                    override fun onResponse(call: Call<BasicResponse>?, response: Response<BasicResponse>?) {
                     }
 
-                    override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                     }
                 })
+                dialog.dismiss()
             } else {
                 val intent = Intent(mContext, LoginActivity::class.java)
                 mContext.startActivity(intent)

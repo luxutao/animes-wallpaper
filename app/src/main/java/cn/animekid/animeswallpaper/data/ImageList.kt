@@ -1,11 +1,12 @@
 package cn.animekid.animeswallpaper.data
 
-data class ImageDataBean(
+data class ImageList(
     var code: Int,
-    var `data`: List<Data>,
+    var `data`: List<ImageListData>,
     var msg: String
-) {
-    data class Data(
+)
+
+data class ImageListData(
         var image_album_id: Int,
         var image_date: String,
         var image_date_gmt: String,
@@ -19,28 +20,5 @@ data class ImageDataBean(
         var image_source: String,
         var image_thumb: String,
         var image_width: Int
-    )
-}
-
-data class ResponseDataBean(
-    var code: Int,
-    var data: String,
-    var msg: String
 )
 
-
-data class UserInfoBean(
-    var code: Int,
-    var msg: String,
-    var data: Data
-) {
-    data class Data(
-        var userid: Int,
-        var token: String,
-        var name: String,
-        var create_time: String,
-        var email: String,
-        var sex: String,
-        var avatar: String
-    )
-}

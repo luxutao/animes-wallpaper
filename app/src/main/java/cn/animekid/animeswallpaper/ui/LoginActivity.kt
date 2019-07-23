@@ -10,8 +10,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.ResponseDataBean
-import cn.animekid.animeswallpaper.data.UserInfoBean
+import cn.animekid.animeswallpaper.data.BasicResponse
+import cn.animekid.animeswallpaper.data.UserInfo
+import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import kotlinx.android.synthetic.main.login.*
@@ -24,14 +25,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.regex.Pattern
 
-class LoginActivity: AppCompatActivity() {
+class LoginActivity: BaseAAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login)
-        setSupportActionBar(this.findViewById<android.support.v7.widget.Toolbar>(R.id.toolbar))
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         forgot_password.setOnClickListener {
             val intent = Intent(this, ForgetPasswordActivity::class.java)
@@ -49,14 +46,14 @@ class LoginActivity: AppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.AuthService().authLogin(email = user_email, password = user_password).enqueue(object: Callback<ResponseDataBean> {
-                override fun onResponse(call: Call<ResponseDataBean>, response: Response<ResponseDataBean>) {
+            Requester.AuthService().authLogin(email = user_email, password = user_password).enqueue(object: Callback<BasicResponse> {
+                override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val u = response.body()!!
 
                     if (u.code == 200) {
-                        Requester.AuthService().getUserinfo(token = u.data).enqueue(object: Callback<UserInfoBean> {
-                            override fun onResponse(call: Call<UserInfoBean>, response: Response<UserInfoBean>) {
+                        Requester.AuthService().getUserinfo(token = u.data).enqueue(object: Callback<UserInfo> {
+                            override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
                                 val userInfoData = response.body()!!
                                 val userinfo = ContentValues()
                                 userinfo.put("userid", userInfoData.data.userid)
@@ -72,7 +69,7 @@ class LoginActivity: AppCompatActivity() {
                                 finish()
                             }
 
-                            override fun onFailure(call: Call<UserInfoBean>, t: Throwable) {
+                            override fun onFailure(call: Call<UserInfo>, t: Throwable) {
                                 Toast.makeText(this@LoginActivity, "验证失败了!", Toast.LENGTH_LONG).show()
                             }
                         })
@@ -84,7 +81,7 @@ class LoginActivity: AppCompatActivity() {
 
                 }
 
-                override fun onFailure(call: Call<ResponseDataBean>, t: Throwable) {
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                     Log.d("login_error", t.message)
                     Toast.makeText(this@LoginActivity, "登录错误,请检查账号密码是否正确!", Toast.LENGTH_LONG).show()
                 }
@@ -97,25 +94,8 @@ class LoginActivity: AppCompatActivity() {
         }
     }
 
-    private fun getData(parser: RowParser<UserInfoBean.Data>): List<UserInfoBean.Data>{
-        val itemdata = this.database.use {
-            select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
-                val itemlist: List<UserInfoBean.Data> = parseList(parser)
-                return@exec itemlist
-            }
-        }
-        return itemdata
-    }
-
-    // 监听导航栏按钮
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-        when (item.itemId) {
-            android.R.id.home -> {
-                this.finish()
-            }
-        }
-        return true
+    override fun getLayoutId(): Int {
+        return  R.layout.login
     }
 
 }

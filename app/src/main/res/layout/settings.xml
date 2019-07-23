@@ -57,21 +57,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/delete_account"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="删除账号"
-                android:background="@color/colorAccent"
-                android:layout_marginTop="30dp"
-                android:layout_marginHorizontal="50dp"
-                android:visibility="gone"/>
-        </LinearLayout>
-
     </LinearLayout>
 
 

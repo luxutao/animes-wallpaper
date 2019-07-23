@@ -51,6 +51,11 @@
             android:label="@string/str_profile"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".ui.BaseAAppCompatActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
