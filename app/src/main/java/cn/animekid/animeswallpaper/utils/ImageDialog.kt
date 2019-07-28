@@ -5,25 +5,27 @@ import android.content.Intent
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.*
+import cn.animekid.animeswallpaper.data.BasicResponse
+import cn.animekid.animeswallpaper.data.ImageListData
+import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.ui.LoginActivity
 import com.bm.library.PhotoView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.select
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
+import org.jetbrains.anko.db.select
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,14 +34,19 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
 
     fun showLoading(imagebean: ImageListData): AlertDialog {
 
-        val dialog = AlertDialog.Builder(mContext).create()
-        dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        val dialog = AlertDialog.Builder(mContext,R.style.Dialog_Fullscreen).create()
+//        dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window.decorView.setPadding(0,0,0,0)
+        dialog.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
         val layoutInflater = LayoutInflater.from(mContext)
         val dialog_layout = layoutInflater.inflate(R.layout.image_dialog, null)
         val BigImageView = dialog_layout.findViewById<PhotoView>(R.id.big_image)
         val BigImageDownload = dialog_layout.findViewById<FloatingActionButton>(R.id.big_image_download)
         val BigImageClose = dialog_layout.findViewById<ImageButton>(R.id.big_image_close)
         BigImageView.enable()
+        if (imagebean.image_width < imagebean.image_height) {
+            BigImageView.scaleType = ImageView.ScaleType.FIT_XY
+        }
 
         Glide.with(mContext)
                 .load(imagebean.image_source)

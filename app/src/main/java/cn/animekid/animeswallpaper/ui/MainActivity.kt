@@ -194,6 +194,9 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
                 dialog.setNegativeButton("取消", null)
                 dialog.create().show()
             }
+            R.id.nav_about -> {
+
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
