@@ -69,8 +69,6 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
                 })
         dialog.setView(dialog_layout)
         Handler().postDelayed({
-            Toast.makeText(mContext, this@ImageDialog.isLoading.toString(), Toast.LENGTH_LONG).show()
-
             if (this@ImageDialog.isLoading == false) {
                 Toast.makeText(mContext, "网络连接较慢，请耐心等待。", Toast.LENGTH_LONG).show()
             }
