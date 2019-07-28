@@ -9,4 +9,5 @@
     <color name="colorBorder">#98c2f4</color>
     <color name="colorStatusBar">#ff0005</color>
     <color name="colorWindowBar">#ff0005</color>
+    <color name="colorBlack">#000000</color>
 </resources>

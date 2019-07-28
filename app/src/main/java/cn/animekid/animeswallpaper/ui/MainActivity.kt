@@ -2,13 +2,13 @@ package cn.animekid.animeswallpaper.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.provider.MediaStore
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
-import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
@@ -28,7 +27,6 @@ import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.BasicResponse
-import cn.animekid.animeswallpaper.data.UserInfo
 import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.fragment.FragmentBing
 import cn.animekid.animeswallpaper.fragment.FragmentPC
@@ -39,7 +37,7 @@ import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import org.jetbrains.anko.db.*
+import org.jetbrains.anko.db.delete
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -195,7 +193,8 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
                 dialog.create().show()
             }
             R.id.nav_about -> {
-
+                val intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
             }
         }
 

@@ -6,7 +6,6 @@ import android.view.MenuItem
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.database
-import org.jetbrains.anko.db.RowParser
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select

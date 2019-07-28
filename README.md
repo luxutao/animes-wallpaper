@@ -1,6 +1,12 @@
 ### 动漫壁纸APP
 PS: 必须要同意权限哦
 
+#### V1.3.0
+1. 添加关于我们的功能。
+2. 添加了问题反馈功能。
+3. 添加了查看版本是否最新的功能。
+4. 更新了图标及启动动画。
+
 #### V1.2.0
 1. 添加拍照功能，直接存储到系统图库。
 2. 添加打开图库功能。
@@ -16,7 +22,9 @@ PS: 必须要同意权限哦
 4. 登录修改个人信息功能。
 5. 现有竖屏、横屏及bing壁纸。
 
-![scrrenshot](screenshot/Screenshot_20190420_134438_cn.animekid.animeswallpaper.jpg)
-![scrrenshot](screenshot/Screenshot_20190420_134445_cn.animekid.animeswallpaper.jpg)
-![scrrenshot](screenshot/Screenshot_20190420_134455_cn.animekid.animeswallpaper.jpg)
-![scrrenshot](screenshot/Screenshot_20190420_134500_cn.animekid.animeswallpaper.jpg)
+![scrrenshot](screenshot/Screenshot_1564317425.png)
+![scrrenshot](screenshot/Screenshot_1564317441.png)
+![scrrenshot](screenshot/Screenshot_1564317451.png)
+![scrrenshot](screenshot/Screenshot_1564317462.png)
+![scrrenshot](screenshot/Screenshot_1564317482.png)
+![scrrenshot](screenshot/Screenshot_1564317493.png)

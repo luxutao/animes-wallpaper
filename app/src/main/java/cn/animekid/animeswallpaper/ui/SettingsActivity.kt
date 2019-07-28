@@ -3,20 +3,11 @@ package cn.animekid.animeswallpaper.ui
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
-import cn.animekid.animeswallpaper.api.Requester
-import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.ClearCache
-import cn.animekid.animeswallpaper.utils.ToolsHelper
-import cn.animekid.animeswallpaper.utils.database
 import kotlinx.android.synthetic.main.settings.*
-import org.jetbrains.anko.db.delete
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SettingsActivity: BaseAAppCompatActivity() {
 

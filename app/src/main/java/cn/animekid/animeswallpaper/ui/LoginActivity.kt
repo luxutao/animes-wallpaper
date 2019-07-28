@@ -3,27 +3,19 @@ package cn.animekid.animeswallpaper.ui
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
-import android.view.MenuItem
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
 import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.data.UserInfo
-import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import kotlinx.android.synthetic.main.login.*
-import org.jetbrains.anko.db.RowParser
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.regex.Pattern
 
 class LoginActivity: BaseAAppCompatActivity() {
 

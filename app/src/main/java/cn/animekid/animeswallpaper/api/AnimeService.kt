@@ -2,7 +2,10 @@ package cn.animekid.animeswallpaper.api
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import android.util.Log
+import android.view.View
+import cn.animekid.animeswallpaper.R
 import retrofit2.Call
 import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.data.ImageList
@@ -45,9 +48,12 @@ class Requester {
             return getService(ImageService.baseUrl, ImageService::class.java)
         }
 
-        //可用于多种不同种类的请求
         fun AuthService(): AuthService {
             return getService(AuthService.baseUrl, AuthService::class.java)
+        }
+
+        fun PublicService(): PublicService {
+            return getService(PublicService.baseUrl, PublicService::class.java)
         }
 
     }
@@ -111,6 +117,20 @@ interface ImageService {
     @Multipart
     @POST("uploadImage")
     fun uploadImage(@Query("token") token: String, @Part file: MultipartBody.Part): Call<BasicResponse>
+}
+
+interface PublicService {
+
+    companion object {
+        val baseUrl = "https://api.animekid.cn/api/public/"
+    }
+
+    @GET("checkUpdate")
+    fun checkUpdate(@Query("ticket") ticket: String = ToolsHelper.getTicket("checkUpdate"), @Query("app_name") app_name: String = "ANIMEWALLPAPER", @Query("app_version") app_version: String): Call<BasicResponse>
+
+    @FormUrlEncoded
+    @POST("feedback")
+    fun feedback(@Query("ticket") ticket: String = ToolsHelper.getTicket("feedback"),@Field("app_name") app_name: String = "ANIMEWALLPAPER",  @Field("email") email: String, @Field("content") content: String): Call<BasicResponse>
 }
 
 

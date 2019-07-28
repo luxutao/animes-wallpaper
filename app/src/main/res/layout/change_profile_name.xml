@@ -27,6 +27,7 @@
                 android:layout_marginHorizontal="10dp"/>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

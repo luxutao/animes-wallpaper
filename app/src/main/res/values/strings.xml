@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">动漫壁纸</string>
+    <string name="app_version">1.2.0</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">未登录</string>
@@ -23,6 +24,8 @@
     <string name="str_register">注册</string>
     <string name="str_detail">详情</string>
     <string name="str_profile">个人资料</string>
+    <string name="str_about">关于我们</string>
+    <string name="str_license">LICENSE</string>
     <string name="str_go_login">去登录</string>
     <string name="str_forget_password">忘记密码</string>
     <string name="str_no_account">没有账号?</string>
@@ -30,4 +33,14 @@
     <string name="str_forget_password_t">忘记密码?</string>
     <string name="str_miss">想起来了?</string>
     <string name="str_reset_password">重置密码</string>
+
+    <string name="about_help">帮助中心&#038;问题反馈</string>
+    <string name="about_check_update">检查更新</string>
+    <string name="about_version">当前版本</string>
+    <string name="about_license">《 Apache License 》</string>
+    <string name="feedback_content_label">问题反馈</string>
+    <string name="feedback_content">可以在此或访问https://github.com/luxutao/animes-wallpaper提交issue</string>
+    <string name="feedback_email">Email</string>
+    <string name="feedback_email_label">邮箱</string>
+    <string name="feedback_submit">一键反馈</string>
 </resources>
