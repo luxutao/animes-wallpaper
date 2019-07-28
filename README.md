@@ -22,10 +22,10 @@ PS: 必须要同意权限哦
 4. 登录修改个人信息功能。
 5. 现有竖屏、横屏及bing壁纸。
 
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317425.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317441.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317451.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317462.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317482.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
-<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317493.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317425.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317441.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317451.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317462.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317482.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/screenshot/Screenshot_1564317493.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
 
