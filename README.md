@@ -22,9 +22,10 @@ PS: 必须要同意权限哦
 4. 登录修改个人信息功能。
 5. 现有竖屏、横屏及bing壁纸。
 
-![scrrenshot](screenshot/Screenshot_1564317425.png)
-![scrrenshot](screenshot/Screenshot_1564317441.png)
-![scrrenshot](screenshot/Screenshot_1564317451.png)
-![scrrenshot](screenshot/Screenshot_1564317462.png)
-![scrrenshot](screenshot/Screenshot_1564317482.png)
-![scrrenshot](screenshot/Screenshot_1564317493.png)
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317425.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317441.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317451.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317462.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317482.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+<img src="/luxutao/animes-wallpaper/raw/master/screenshot/Screenshot_1564317493.png" alt="scrrenshot" style="max-width:100%;width: 50%;">
+
