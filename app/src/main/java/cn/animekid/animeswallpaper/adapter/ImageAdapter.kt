@@ -10,6 +10,7 @@ import android.widget.TextView
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.data.ImageListData
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
 import java.util.*
@@ -43,8 +44,9 @@ class ImageAdapter(private val _context: Context, private val _list: ArrayList<I
 
         Glide.with(v)
                 .load(_list[position].image_thumb)
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_image_loading))
-                .apply(RequestOptions.errorOf(R.drawable.ic_image_loading_error))
+                .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                .apply(RequestOptions().placeholder(R.drawable.ic_image_loading_layer))
+                .apply(RequestOptions().error(R.drawable.ic_image_loading_error_layer))
                 .transition(withCrossFade())
                 .into(holder.image)
         holder.count.setText(String.format(_context.getString(R.string.image_likes),  _list[position].image_likes))

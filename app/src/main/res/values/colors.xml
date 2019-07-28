@@ -11,4 +11,5 @@
     <color name="colorStatusBar">#ff0005</color>
     <color name="colorWindowBar">#ff0005</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlackT">#41000000</color>
 </resources>

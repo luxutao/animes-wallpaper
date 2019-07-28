@@ -2,6 +2,8 @@ package cn.animekid.animeswallpaper.utils
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Handler
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -17,8 +19,11 @@ import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.ui.LoginActivity
 import com.bm.library.PhotoView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -31,6 +36,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
+
+    private var isLoading: Boolean = false
 
     fun showLoading(imagebean: ImageListData): AlertDialog {
 
@@ -51,10 +58,23 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
         Glide.with(mContext)
                 .load(imagebean.image_source)
                 .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_image_loading))
-                .apply(RequestOptions.errorOf(R.drawable.ic_image_loading_error))
-                .into(BigImageView)
+                .apply(RequestOptions().placeholder(R.color.colorBlackT))
+                .apply(RequestOptions().error(R.color.colorBlackT))
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(object: DrawableImageViewTarget(BigImageView) {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        super.onResourceReady(resource, transition)
+                        this@ImageDialog.isLoading = true
+                    }
+                })
         dialog.setView(dialog_layout)
+        Handler().postDelayed({
+            Toast.makeText(mContext, this@ImageDialog.isLoading.toString(), Toast.LENGTH_LONG).show()
+
+            if (this@ImageDialog.isLoading == false) {
+                Toast.makeText(mContext, "网络连接较慢，请耐心等待。", Toast.LENGTH_LONG).show()
+            }
+        }, 2000)
 
         BigImageClose.setOnClickListener { dialog.dismiss() }
 
