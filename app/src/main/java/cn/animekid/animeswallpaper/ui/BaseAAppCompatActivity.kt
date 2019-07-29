@@ -6,13 +6,11 @@ import android.view.MenuItem
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.utils.database
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.*
 
 abstract class BaseAAppCompatActivity: AppCompatActivity() {
 
-    var UserInfoList: List<UserInfoData> = arrayListOf()
+    var UserInfo: UserInfoData = UserInfoData(0,"","","","","","")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +21,7 @@ abstract class BaseAAppCompatActivity: AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
+
     fun getData(){
         val itemdata = this.database.use {
             select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
@@ -30,7 +29,15 @@ abstract class BaseAAppCompatActivity: AppCompatActivity() {
                 return@exec itemlist
             }
         }
-        this.UserInfoList = itemdata
+        if (itemdata.count() >= 1) {
+            this.UserInfo = itemdata.first()
+        }
+    }
+
+    fun updateData(column: String, value: Any, userid: Int) {
+        this.database.use {
+            update("anime_users",column to value).whereArgs("userid=" + userid).exec()
+        }
     }
 
     abstract fun getLayoutId(): Int
