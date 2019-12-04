@@ -52,6 +52,7 @@ class LoginActivity: BaseAAppCompatActivity() {
                                 userinfo.put("token", u.data)
                                 userinfo.put("name", userInfoData.data.name)
                                 userinfo.put("create_time", userInfoData.data.create_time)
+                                userinfo.put("modify_time", userInfoData.data.modify_time)
                                 userinfo.put("email", userInfoData.data.email)
                                 userinfo.put("sex", userInfoData.data.sex)
                                 userinfo.put("avatar", userInfoData.data.avatar)

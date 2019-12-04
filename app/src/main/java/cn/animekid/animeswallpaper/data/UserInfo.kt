@@ -12,6 +12,7 @@ data class UserInfoData(
         var token: String,
         var name: String,
         var create_time: String,
+        var modify_time: String,
         var email: String,
         var sex: String,
         var avatar: String

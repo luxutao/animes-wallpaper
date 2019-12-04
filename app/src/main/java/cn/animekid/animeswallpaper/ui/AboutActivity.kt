@@ -27,7 +27,7 @@ class AboutActivity: BaseAAppCompatActivity() {
         this.NowVersion.text = packetInfo.versionName
 
         this.CheckUpdate.setOnClickListener {
-            Requester.PublicService().checkUpdate(app_version = packetInfo.versionName).enqueue(object: Callback<BasicResponse> {
+            Requester.PublicService().checkUpdate(package_name = this.packageName, app_version = packetInfo.versionName).enqueue(object: Callback<BasicResponse> {
                 override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     if (response.body()!!.data == "True") {
                         val dialog = AlertDialog.Builder(this@AboutActivity)

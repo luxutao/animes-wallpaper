@@ -37,7 +37,7 @@ class FeedbackActivity: BaseAAppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.PublicService().feedback(email = email, content = content).enqueue(object: Callback<BasicResponse> {
+            Requester.PublicService().feedback(package_name = this.packageName, email = email, content = content).enqueue(object: Callback<BasicResponse> {
                 override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                     Toast.makeText(this@FeedbackActivity, "反馈已提交", Toast.LENGTH_SHORT).show()
                     this@FeedbackActivity.finish()

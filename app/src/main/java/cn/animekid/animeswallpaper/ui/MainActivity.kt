@@ -26,12 +26,14 @@ import android.widget.TextView
 import android.widget.Toast
 import cn.animekid.animeswallpaper.R
 import cn.animekid.animeswallpaper.api.Requester
+import cn.animekid.animeswallpaper.data.Announcement
 import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.data.UserInfoData
 import cn.animekid.animeswallpaper.fragment.FragmentBing
 import cn.animekid.animeswallpaper.fragment.FragmentPC
 import cn.animekid.animeswallpaper.fragment.FragmentPhone
 import cn.animekid.animeswallpaper.fragment.FragmentUpload
+import cn.animekid.animeswallpaper.utils.MarqueeText
 import cn.animekid.animeswallpaper.utils.ToolsHelper
 import cn.animekid.animeswallpaper.utils.database
 import com.bumptech.glide.Glide
@@ -65,6 +67,7 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
     private lateinit var UserProfile: MenuItem
     private lateinit var UserLogout: MenuItem
     private lateinit var BottomMenu: BottomNavigationView
+    private lateinit var AnnouncementTxt: MarqueeText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,9 +106,11 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+        this.getAnnouncementTxt()
     }
 
     fun initUI(){
+        this.AnnouncementTxt = this.findViewById(R.id.txt)
         this.navView = this.findViewById(R.id.nav_view)
         this.navheaderView = this.navView.inflateHeaderView(R.layout.nav_header_main)
         this.UserAvatar = this.navheaderView.findViewById(R.id.user_avatar)
@@ -214,9 +219,7 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
             this.UserProfile.isVisible = false
             this.islogin = false
         } else {
-            if (this.UserInfo.avatar != "F") {
-                Glide.with(this).load(this.UserInfo.avatar).into(this.UserAvatar)
-            }
+            Glide.with(this).load(this.UserInfo.avatar).into(this.UserAvatar)
             this.UserEmail.text = this.UserInfo.email
             this.UserName.text = this.UserInfo.name
             this.UserLogout.isVisible = true
@@ -314,5 +317,17 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
             val imageBitmap = data!!.extras.get("data") as Bitmap
             MediaStore.Images.Media.insertImage(getContentResolver(), imageBitmap, "" , "")
         }
+    }
+
+    private fun getAnnouncementTxt() {
+        Requester.PublicService().getAnnouncement(package_name=this.packageName).enqueue(object: Callback<Announcement> {
+            override fun onResponse(call: Call<Announcement>, response: Response<Announcement>) {
+                this@MainActivity.AnnouncementTxt.text = response.body()!!.data.message
+            }
+
+            override fun onFailure(call: Call<Announcement>, t: Throwable) {
+                Log.d("logoutError",t.message)
+            }
+        })
     }
 }

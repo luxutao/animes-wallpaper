@@ -10,7 +10,7 @@ import org.jetbrains.anko.db.*
 
 abstract class BaseAAppCompatActivity: AppCompatActivity() {
 
-    var UserInfo: UserInfoData = UserInfoData(0,"","","","","","")
+    var UserInfo: UserInfoData = UserInfoData(0,"","","","","","", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ abstract class BaseAAppCompatActivity: AppCompatActivity() {
 
     fun getData(){
         val itemdata = this.database.use {
-            select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
+            select("anime_users","userid","token","name","create_time","modify_time","email","sex","avatar").exec {
                 val itemlist: List<UserInfoData> = parseList(classParser())
                 return@exec itemlist
             }

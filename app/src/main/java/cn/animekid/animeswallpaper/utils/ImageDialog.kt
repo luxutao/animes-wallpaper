@@ -78,7 +78,7 @@ class ImageDialog(var mContext: Context) : AlertDialog(mContext) {
 
         BigImageDownload.setOnClickListener {
             val itemdata = mContext.database.use {
-                select("anime_users","userid","token","name","create_time","email","sex","avatar").exec {
+                select("anime_users","userid","token","name","create_time","modify_time","email","sex","avatar").exec {
                     val itemlist: List<UserInfoData> = parseList(classParser<UserInfoData>())
                     return@exec itemlist
                 }

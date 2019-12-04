@@ -27,6 +27,7 @@ class DBOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "anime", null, 1
                 "sex" to TEXT,
                 "email" to TEXT,
                 "create_time" to TEXT,
+                "modify_time" to TEXT,
                 "token" to TEXT,
                 "avatar" to TEXT)
     }

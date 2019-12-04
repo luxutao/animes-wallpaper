@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import cn.animekid.animeswallpaper.R
+import cn.animekid.animeswallpaper.data.Announcement
 import retrofit2.Call
 import cn.animekid.animeswallpaper.data.BasicResponse
 import cn.animekid.animeswallpaper.data.ImageList
@@ -125,12 +126,16 @@ interface PublicService {
         val baseUrl = "https://api.animekid.cn/api/public/"
     }
 
+    @GET("getAnnouncement")
+    fun getAnnouncement(@Query("ticket") ticket: String = ToolsHelper.getTicket("getAnnouncement"), @Query("package_name") package_name: String): Call<Announcement>
+
+
     @GET("checkUpdate")
-    fun checkUpdate(@Query("ticket") ticket: String = ToolsHelper.getTicket("checkUpdate"), @Query("app_name") app_name: String = "ANIMEWALLPAPER", @Query("app_version") app_version: String): Call<BasicResponse>
+    fun checkUpdate(@Query("ticket") ticket: String = ToolsHelper.getTicket("checkUpdate"), @Query("package_name") package_name: String, @Query("app_version") app_version: String): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("feedback")
-    fun feedback(@Query("ticket") ticket: String = ToolsHelper.getTicket("feedback"),@Field("app_name") app_name: String = "ANIMEWALLPAPER",  @Field("email") email: String, @Field("content") content: String): Call<BasicResponse>
+    fun feedback(@Query("ticket") ticket: String = ToolsHelper.getTicket("feedback"),@Field("package_name") package_name: String,  @Field("email") email: String, @Field("content") content: String): Call<BasicResponse>
 }
 
 
