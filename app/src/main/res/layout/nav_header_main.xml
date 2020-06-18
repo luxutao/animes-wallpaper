@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <cn.animekid.animeswallpaper.utils.PrettyImageView
+    <me.m123.image.utils.PrettyImageView
         android:id="@+id/user_avatar"
         android:layout_width="72dp"
         android:layout_height="72dp"

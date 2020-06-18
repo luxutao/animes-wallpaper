@@ -29,7 +29,7 @@
                 android:src="@drawable/ic_sound"
                 android:layout_marginStart="1dp" />
 
-            <cn.animekid.animeswallpaper.utils.MarqueeText
+            <me.m123.image.utils.MarqueeText
                 android:id="@+id/txt"
                 android:text="@string/warning"
                 android:layout_width="400dp"

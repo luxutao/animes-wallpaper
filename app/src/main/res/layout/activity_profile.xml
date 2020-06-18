@@ -31,7 +31,7 @@
                 android:textColor="#000000"
                 android:textSize="18sp"/>
 
-            <cn.animekid.animeswallpaper.utils.PrettyImageView
+            <me.m123.image.utils.PrettyImageView
                 android:id="@+id/user_avatar"
                 android:layout_gravity="center"
                 android:layout_width="40dp"

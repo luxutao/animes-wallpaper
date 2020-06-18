@@ -38,7 +38,7 @@
                     android:layout_marginTop="-80dp"
                     android:gravity="center">
 
-                    <cn.animekid.animeswallpaper.utils.PrettyImageView
+                    <me.m123.image.utils.PrettyImageView
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginBottom="8dp"
