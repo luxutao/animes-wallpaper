@@ -8,12 +8,12 @@ import android.util.Log
 import android.widget.Toast
 import me.m123.image.R
 import me.m123.image.api.Requester
-import me.m123.image.data.UserInfo
 import me.m123.image.utils.ToolsHelper
 import me.m123.image.utils.database
 import kotlinx.android.synthetic.main.login.*
 import me.m123.image.data.BaseResponse
 import me.m123.image.data.LoginResponse
+import me.m123.image.data.UserInfoResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,24 +29,24 @@ class LoginActivity: BaseAAppCompatActivity() {
         }
 
         login.setOnClickListener {
-            val user_email = email.text.toString()
+            val username = username.text.toString()
             val user_password = password.text.toString()
-            if (TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_password)) {
-                Toast.makeText(this, "邮箱或密码不能为空!", Toast.LENGTH_SHORT).show()
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(user_password)) {
+                Toast.makeText(this, "用户名或密码不能为空!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.AuthService().authLogin(username = user_email, password = user_password).enqueue(object: Callback<LoginResponse> {
+            Requester.AuthService().authLogin(username = username, password = user_password).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val u = response.body()!!
 
-                    if (u.token.isNotEmpty()) {
-                        Requester.UserService().getUserInfo(u.userid).enqueue(object: Callback<UserInfo> {
-                            override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+                    if (u.code == 200) {
+                        Requester.UserService().getUserInfo(u.data.userid, token = "Token " + u.data.token).enqueue(object: Callback<UserInfoResponse> {
+                            override fun onResponse(call: Call<UserInfoResponse>, response: Response<UserInfoResponse>) {
                                 val userInfoData = response.body()!!
                                 val userinfo = ContentValues()
                                 userinfo.put("userid", userInfoData.id)
-                                userinfo.put("token", u.token)
+                                userinfo.put("token", u.data.token)
                                 userinfo.put("email", userInfoData.email)
                                 userinfo.put("username", userInfoData.username)
                                 userinfo.put("first_name", userInfoData.first_name)
@@ -64,13 +64,13 @@ class LoginActivity: BaseAAppCompatActivity() {
                                 finish()
                             }
 
-                            override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+                            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
                                 Toast.makeText(this@LoginActivity, "验证失败了!", Toast.LENGTH_LONG).show()
                             }
                         })
 
                     } else {
-                        Toast.makeText(this@LoginActivity, "该账号不存在！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "登录错误,请检查账号密码是否正确!", Toast.LENGTH_SHORT).show()
                     }
 
 

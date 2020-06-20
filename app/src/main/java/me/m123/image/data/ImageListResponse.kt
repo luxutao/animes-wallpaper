@@ -1,6 +1,6 @@
 package me.m123.image.data
 
-data class ImageList(
+data class ImageListResponse(
     var count: Int,
     var `results`: List<ImageListData>,
     var next: String,

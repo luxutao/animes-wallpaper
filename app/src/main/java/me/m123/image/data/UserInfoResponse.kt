@@ -1,6 +1,6 @@
 package me.m123.image.data
 
-data class UserInfo(
+data class UserInfoResponse(
         var id: Int,
         var username: String,
         var first_name: String,

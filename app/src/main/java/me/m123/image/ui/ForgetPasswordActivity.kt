@@ -8,6 +8,7 @@ import me.m123.image.R
 import me.m123.image.api.Requester
 import me.m123.image.utils.ToolsHelper
 import kotlinx.android.synthetic.main.forget_password.*
+import me.m123.image.data.BaseResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,25 +20,28 @@ class ForgetPasswordActivity: BaseAAppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         forget.setOnClickListener {
-            val user_email = email.text.toString()
-            if (TextUtils.isEmpty(user_email) || ToolsHelper.isEmailValid(user_email) != true) {
-                Toast.makeText(this, "邮箱不能为空或者邮箱格式不正确!", Toast.LENGTH_SHORT).show()
+            val input_username = username.text.toString()
+            if (TextUtils.isEmpty(input_username)) {
+                Toast.makeText(this, "用户名不能为空!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Toast.makeText(this, "重置链接已发送,请注意查收!", Toast.LENGTH_SHORT).show()
-//            Requester.AuthService().forgetPassword(email = user_email).enqueue(object: Callback<BasicResponse> {
-//                override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
-//                    val c = response.body()!!
-//                    if (c.code == 200) {
-//                        finish()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-//                    Log.d("send_captcha", t.message)
-//                    Toast.makeText(this@ForgetPasswordActivity, "发送失败,请稍后再试.", Toast.LENGTH_SHORT).show()
-//                }
-//            })
+            username.isEnabled = false
+            Requester.AuthService().forgetPassword(username = input_username).enqueue(object: Callback<BaseResponse> {
+                override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
+                    val c = response.body()!!
+                    if (c.code == 200) {
+                        Toast.makeText(this@ForgetPasswordActivity, "重置链接已发送,请注意查收!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@ForgetPasswordActivity, c.msg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                    Log.d("send_captcha", t.message)
+                    Toast.makeText(this@ForgetPasswordActivity, "发送失败,请稍后再试.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         login.setOnClickListener { finish() }

@@ -9,8 +9,8 @@ import android.widget.*
 import me.m123.image.R
 import me.m123.image.adapter.ImageAdapter
 import me.m123.image.api.Requester
-import me.m123.image.data.ImageList
 import me.m123.image.data.ImageListData
+import me.m123.image.data.ImageListResponse
 import me.m123.image.utils.ImageDialog
 import me.m123.image.utils.ToolsHelper
 import retrofit2.Call
@@ -71,14 +71,14 @@ open class BaseFFragment : Fragment() {
     }
 
     fun loadingMore(offset: Int) {
-        Requester.ImageService().getWallpaper(offset = offset, album_id = this.album_id, token = ToolsHelper.getToken(this@BaseFFragment.context!!)).enqueue(object: Callback<ImageList> {
-            override fun onResponse(call: Call<ImageList>?, response: Response<ImageList>?) {
+        Requester.ImageService().getWallpaper(offset = offset, album_id = this.album_id, token = ToolsHelper.getToken(this@BaseFFragment.context!!)).enqueue(object: Callback<ImageListResponse> {
+            override fun onResponse(call: Call<ImageListResponse>?, response: Response<ImageListResponse>?) {
                 this@BaseFFragment.imageGrid.visibility = View.VISIBLE
                 this@BaseFFragment.errorview.visibility = View.GONE
                 this@BaseFFragment.imageList.addAll(response!!.body()!!.results)
                 this@BaseFFragment.adapter.notifyDataSetChanged()
             }
-            override fun onFailure(call: Call<ImageList>, t: Throwable) {
+            override fun onFailure(call: Call<ImageListResponse>, t: Throwable) {
                 Log.e("failed", t.message)
                 if (offset == 10) {
                     this@BaseFFragment.imageGrid.visibility = View.GONE

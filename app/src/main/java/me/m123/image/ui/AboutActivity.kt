@@ -1,6 +1,7 @@
 package me.m123.image.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.LinearLayout
@@ -9,6 +10,7 @@ import android.widget.Toast
 import me.m123.image.R
 import me.m123.image.api.Requester
 import me.m123.image.data.BaseResponse
+import me.m123.image.utils.ToolsHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +19,7 @@ class AboutActivity: BaseAAppCompatActivity() {
 
     private lateinit var CheckUpdate: LinearLayout
     private lateinit var HelpFeedback: LinearLayout
+    private lateinit var SendMail: LinearLayout
     private lateinit var License: TextView
     private lateinit var NowVersion: TextView
 
@@ -27,15 +30,11 @@ class AboutActivity: BaseAAppCompatActivity() {
         this.NowVersion.text = packetInfo.versionName
 
         this.CheckUpdate.setOnClickListener {
-            Requester.PublicService().checkUpdate(package_name = this.packageName, app_version = packetInfo.versionName).enqueue(object: Callback<BaseResponse> {
+            Requester.PublicService().checkUpdate(package_name = this.packageName, app_version = packetInfo.versionName, token = ToolsHelper.getToken(this@AboutActivity)).enqueue(object: Callback<BaseResponse> {
                 override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
-                    if (response.body()!!.result == "赶紧去更新啦") {
-                        val dialog = AlertDialog.Builder(this@AboutActivity)
-                        dialog.setTitle("提示")
-                        dialog.setMessage("找到新版本了！请扫描分享二维码下载最新版本。")
-                        dialog.setPositiveButton("确认", null)
-                        dialog.setNegativeButton("取消", null)
-                        dialog.create().show()
+                    val result = response.body()!!
+                    if (result.code == 200) {
+                        Toast.makeText(this@AboutActivity, result.data.toString(), Toast.LENGTH_LONG).show()
                     }
                     else {
                         Toast.makeText(this@AboutActivity, "已经是最新版本了哦", Toast.LENGTH_SHORT).show()
@@ -49,8 +48,17 @@ class AboutActivity: BaseAAppCompatActivity() {
         }
 
         this.HelpFeedback.setOnClickListener {
-            val intent = Intent(this, FeedbackActivity::class.java)
-            startActivity(intent)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            intent.setData(Uri.parse("https://www.github.com/luxutao/animes-wallpaper"))
+            startActivity(Intent.createChooser(intent, "请选择浏览器"))
+        }
+
+        this.SendMail.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.setData(Uri.parse("luxutao@123m.me"))
+            startActivity(Intent.createChooser(intent, "请选择邮件客户端"))
+
         }
 
         this.License.setOnClickListener {
@@ -65,6 +73,7 @@ class AboutActivity: BaseAAppCompatActivity() {
         this.License = this.findViewById(R.id.about_license)
         this.NowVersion = this.findViewById(R.id.now_version)
         this.HelpFeedback = this.findViewById(R.id.help_feedback)
+        this.SendMail = this.findViewById(R.id.send_mail)
     }
 
     override fun getLayoutId(): Int {

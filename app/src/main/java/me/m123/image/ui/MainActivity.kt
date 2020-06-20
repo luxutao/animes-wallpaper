@@ -169,19 +169,23 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
                 startActivity(intent)
             }
             R.id.nav_share -> {
-                val dialogView = View.inflate(this, R.layout.share_dialog, null)
-                AlertDialog.Builder(this).setTitle("提示").setView(dialogView)
-                    .setPositiveButton("确认") { t_dialog, which -> }
-                    .setNegativeButton("取消", null)
-                    .create().show()
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.setType("text/plain")
+                intent.putExtra(Intent.EXTRA_TEXT, "Hi 推荐您使用一款软件: " + this.getString(R.string.app_name) + ", 体验地址：https://pan.123m.me/public/ak-video-latest.apk")
+                startActivity(Intent.createChooser(intent, "分享"))
             }
             R.id.nav_logout -> {
                 AlertDialog.Builder(this).setTitle("提示").setMessage("确认注销当前账号吗？")
                     .setPositiveButton("确认") { t_dialog, which ->
-                                this@MainActivity.database.use { delete("anime_users") }
-                                Log.d("logoutSuccess","success")
-                                this@MainActivity.defaultData(true)
-                                Toast.makeText(this@MainActivity, "注销账号成功", Toast.LENGTH_SHORT).show()
+                        this@MainActivity.database.use { delete("anime_users") }
+                        Log.d("logoutSuccess","success")
+                        this@MainActivity.defaultData(true)
+                        this.islogin = false
+                        Toast.makeText(this@MainActivity, "注销账号成功", Toast.LENGTH_SHORT).show()
+                        this@MainActivity.finish()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+
                     }
                     .setNegativeButton("取消", null)
                     .create().show()
@@ -308,9 +312,14 @@ class MainActivity : BaseAAppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     private fun getAnnouncementTxt() {
-        Requester.PublicService().getAnnouncement(package_name=this.packageName).enqueue(object: Callback<BaseResponse> {
+        Requester.PublicService().getAnnouncement(package_name=this.packageName, token = ToolsHelper.getToken(this@MainActivity)).enqueue(object: Callback<BaseResponse> {
             override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
-                this@MainActivity.AnnouncementTxt.text = response.body()!!.result
+                val notice = response.body()!!.data.toString()
+                if (notice.isEmpty()) {
+                    this@MainActivity.AnnouncementTxt.text = "暂无公告"
+                } else {
+                    this@MainActivity.AnnouncementTxt.text = response.body()!!.data.toString()
+                }
             }
 
             override fun onFailure(call: Call<BaseResponse>, t: Throwable) {

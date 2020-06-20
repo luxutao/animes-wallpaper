@@ -6,6 +6,7 @@ import me.m123.image.data.*
 import retrofit2.Call
 import me.m123.image.utils.ToolsHelper
 import okhttp3.*
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -70,13 +71,12 @@ interface AuthService {
     @POST("register/")
     fun authRegister(@Field("email") email: String, @Field("username") username: String, @Field("password") password: String): Call<BaseResponse>
 
-    @FormUrlEncoded
-    @POST("captcha/")
-    fun sendCaptcha(@Field("email") email: String, @Field("username") username: String): Call<BaseResponse>
+    @GET("captcha/")
+    fun sendCaptcha(@Query("email") email: String, @Query("username") username: String): Call<BaseResponse>
 
     @FormUrlEncoded
     @POST("forgetpassword/")
-    fun forgetPassword(@Field("username") username: String, @Field("new_password") new_password: String): Call<BaseResponse>
+    fun forgetPassword(@Field("username") username: String): Call<BaseResponse>
 
 }
 
@@ -87,19 +87,15 @@ interface UserService {
         val baseUrl = "https://api.123m.me/api/user/"
     }
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
     @GET("{userid}/")
-    fun getUserInfo(@Path("userid") userid: Int): Call<UserInfo>
+    fun getUserInfo(@Path("userid") userid: Int, @Header("Authorization") token: String): Call<UserInfoResponse>
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
-    @FormUrlEncoded
     @PUT("{userid}/")
-    fun updateUserInfo(@Path("userid") userid: Int, @Body requestBody: RequestBody): Call<BaseResponse>
+    fun updateUserInfo(@Path("userid") userid: Int, @Body requestBody: RequestBody, @Header("Authorization") token: String): Call<BaseResponse>
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
     @FormUrlEncoded
     @POST("{userid}/resetpassword/")
-    fun resetPassword(@Path("userid") userid: Int, @Field("old_password") old_password: String, @Field("new_password") new_password: String): Call<BaseResponse>
+    fun resetPassword(@Path("userid") userid: Int, @Field("old_password") old_password: String, @Field("new_password") new_password: String, @Header("Authorization") token: String): Call<BaseResponse>
 }
 
 interface ImageService {
@@ -109,14 +105,12 @@ interface ImageService {
         val baseUrl = "https://api.123m.me/api/"
     }
 
-//    @Headers("")
     @GET("image/")
-    fun getWallpaper(@Query("offset") offset: Int, @Query("album_id") album_id: Int, @Header("Authorization") token: String): Call<ImageList>
+    fun getWallpaper(@Query("offset") offset: Int, @Query("album_id") album_id: Int, @Header("Authorization") token: String): Call<ImageListResponse>
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
     @Multipart
     @POST("image/")
-    fun uploadImage( @Part file: MultipartBody.Part): Call<BaseResponse>
+    fun uploadImage( @Part file: MultipartBody.Part, @Header("Authorization") token: String): Call<BaseResponse>
 }
 
 interface PublicService {
@@ -125,13 +119,11 @@ interface PublicService {
         val baseUrl = "https://api.123m.me/api/app/"
     }
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
     @GET("notice/")
-    fun getAnnouncement(@Query("package_name") package_name: String): Call<BaseResponse>
+    fun getAnnouncement(@Query("package_name") package_name: String, @Header("Authorization") token: String): Call<BaseResponse>
 
-    @Headers("Authorization: Token bfffb66dc6a15b57e7731c28d4efc328ab7f1e6c")
     @GET("checkupdate/")
-    fun checkUpdate(@Query("package_name") package_name: String, @Query("app_version") app_version: String): Call<BaseResponse>
+    fun checkUpdate(@Query("package_name") package_name: String, @Query("app_version") app_version: String, @Header("Authorization") token: String): Call<BaseResponse>
 }
 
 class LogInterceptor : Interceptor {

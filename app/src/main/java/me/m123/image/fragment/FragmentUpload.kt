@@ -47,7 +47,7 @@ class FragmentUpload: Fragment() {
             // 上传图片
             val photoRequestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
             val photoPart = MultipartBody.Part.createFormData("file", file.name, photoRequestBody)
-            Requester.ImageService().uploadImage(file = photoPart).enqueue(object: Callback<BaseResponse> {
+            Requester.ImageService().uploadImage(file = photoPart, token = ToolsHelper.getToken(this@FragmentUpload.context!!)).enqueue(object: Callback<BaseResponse> {
                 override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
                     Toast.makeText(view.context, "上传成功，谢谢你提供的资源！😘", Toast.LENGTH_SHORT).show()
                 }

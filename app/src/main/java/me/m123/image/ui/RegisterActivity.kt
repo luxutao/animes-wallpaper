@@ -31,7 +31,10 @@ class RegisterActivity: BaseAAppCompatActivity() {
             Requester.AuthService().sendCaptcha(email = user_email, username = "").enqueue(object: Callback<BaseResponse> {
                 override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
                     val c = response.body()!!
-                    _Captcha = c.result
+                    if (c.code != 200) {
+                        Toast.makeText(this@RegisterActivity, "验证码发送失败,请稍后再试.", Toast.LENGTH_SHORT).show()
+                    }
+                    _Captcha = c.data.toString()
                 }
 
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
@@ -42,11 +45,12 @@ class RegisterActivity: BaseAAppCompatActivity() {
         }
 
         register.setOnClickListener {
+            val username = username.text.toString()
             val user_email = email.text.toString()
             val user_captcha = captcha.text.toString()
             val user_password = password.text.toString()
-            if (TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_password) || TextUtils.isEmpty(user_captcha)) {
-                Toast.makeText(this, "邮箱,密码,验证码不能为空!", Toast.LENGTH_SHORT).show()
+            if (TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_password) || TextUtils.isEmpty(user_captcha) || TextUtils.isEmpty(username)) {
+                Toast.makeText(this, "不能为空!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (user_captcha != _Captcha) {
@@ -57,15 +61,16 @@ class RegisterActivity: BaseAAppCompatActivity() {
                 Toast.makeText(this, "请输入一个正确的邮箱!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Requester.AuthService().authRegister(email = user_email, password = user_password, username = "").enqueue(object: Callback<BaseResponse> {
+            Requester.AuthService().authRegister(email = user_email, password = user_password, username = username).enqueue(object: Callback<BaseResponse> {
                 override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
                     Log.d("userinfo", response.body()!!.toString())
                     val res = response.body()!!
-                    if (res.result == "创建成功") {
+                    if (res.code == 200) {
                         Toast.makeText(this@RegisterActivity, "注册成功啦!感谢你的支持,赶快去登录吧!", Toast.LENGTH_SHORT).show()
                         finish()
+                    } else {
+                        Toast.makeText(this@RegisterActivity, res.msg, Toast.LENGTH_SHORT).show()
                     }
-                    Toast.makeText(this@RegisterActivity, res.result, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {

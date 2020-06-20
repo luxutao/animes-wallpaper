@@ -62,11 +62,6 @@
             android:label="@string/str_license"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name="me.m123.image.ui.FeedbackActivity"
-            android:label="@string/feedback_content_label"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
     </application>
 
 </manifest>

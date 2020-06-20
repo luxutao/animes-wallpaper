@@ -50,11 +50,10 @@ class SplashActivity: AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-        if (data!!.getStringExtra("result") == "true") {
+        if (resultCode == 1) {
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
-            this@SplashActivity.finish()
         }
+        this@SplashActivity.finish()
     }
 }
