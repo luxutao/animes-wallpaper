@@ -55,10 +55,13 @@ class AboutActivity: BaseAAppCompatActivity() {
         }
 
         this.SendMail.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.setData(Uri.parse("luxutao@123m.me"))
-            startActivity(Intent.createChooser(intent, "请选择邮件客户端"))
-
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:") // only email apps should handle this
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("luxutao@123m.me"))
+            }
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
         }
 
         this.License.setOnClickListener {
